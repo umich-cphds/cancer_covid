@@ -1,5 +1,18 @@
 # Loads, manipulates, and prepares clean data file for analysis
-make_main_data <- function(save = TRUE) {
+make_main_data <- function(force = FALSE, save = TRUE) {
+  
+  if (force == FALSE) {
+    if (file.exists("objects/main_data.rds")) {
+      
+      skip <- readline(prompt = "`objects/main_data.rds` already exists. Run anyway (y/n)? ")
+      
+      if (tolower(substr(as.character(skip), 1, 1)) == "y") {
+        stop()
+      }
+      
+    }
+  }
+  
   # load phecode data ----------
   icd_phecode_tested    <- load_icd_phecode_tested_data()
   icd_phecode_unmatched <- load_icd_phecode_unmatched_data()
