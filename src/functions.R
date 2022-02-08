@@ -167,6 +167,8 @@ load_tested_covariate_data <- function(outvar, tested_phenome_ids, cancer_tested
     Deceased       = fifelse(OutcomeMax %in% outvar[["mortality"]], 1, 0),
     `Cohort Type`  = "Tested"
   )][]
+  
+  PCRcohort <- PCRcohort[, `Severe COVID` = fifelse(Hospitalized == 1 | ICU == 1 | Deceased == 1, 1, 0)]
 
   return(PCRcohort[])
 }
