@@ -196,8 +196,8 @@ make_restricted_phenome_data <- function(input) {
       )
     ][
       , `:=` (
-        recent_rad_only     = fifelse(radiation == 1 & chemo == 0 & surgery_dsb == 0, 1, 0),
-        recent_surgery_only = fifelse(surgery_dsb == 1 & chemo == 0 & radiation == 0, 1, 0)
+        recent_rad_only     = fifelse(radiation == 1 & recent_chemo == 0 & surgery_dsb == 0, 1, 0),
+        recent_surgery_only = fifelse(surgery_dsb == 1 & recent_chemo == 0 & radiation == 0, 1, 0)
       )
     ][
       Age >= 0

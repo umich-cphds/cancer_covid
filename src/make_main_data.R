@@ -125,8 +125,8 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   cli::cli_alert_info("combining data")
   
   num_vars <- c("Age", "BMI",
-                "NDI",
-                "PersonsPerSquareMile", "RespiratoryDiseases",
+                "disadvantage2_13_17_qrtl",
+                "popden13_17_qrtl", "RespiratoryDiseases",
                 "CirculatoryDiseases", "AnyCancer", "Type2Diabetes",
                 "KidneyDiseases", "LiverDiseases",
                 "AutoimmuneDiseases")
@@ -140,7 +140,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   combined <- combined[, ComborbidityScore.old := as.numeric(ComorbidityScore)][
     , ComorbidityScore := RespiratoryDiseases + CirculatoryDiseases + Type2Diabetes + KidneyDiseases + LiverDiseases + AutoimmuneDiseases
   ][
-    , c("Hospitalized", "ICU", "Deceased", "DaysSinceBirth_EARLIEST_TEST_OR_DX") := lapply(.SD, as.numeric), .SDcols = c("Hospitalized", "ICU", "Deceased", "DaysSinceBirth_EARLIEST_TEST_OR_DX")][
+    , c("Hospitalized", "ICU", "Deceased") := lapply(.SD, as.numeric), .SDcols = c("Hospitalized", "ICU", "Deceased")][
       , `:=` (
         AgeCategory    = relevel(as.factor(AgeCategory), ref = "[18,35)"),
         BMIcategory    = relevel(as.factor(BMIcategory), ref = "[18.5,25)"),
@@ -169,14 +169,10 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
       , (factor_vars) := lapply(.SD, as.factor), .SDcols = factor_vars
     ][
       , `:=` (
-        PersonsPerSquareMile.old = PersonsPerSquareMile,
-        NDI.old = NDI,
         Age.old = Age
       )
     ][
       , `:=` (
-        PersonsPerSquareMile = log(PersonsPerSquareMile + 1),
-        NDI = NDI/sd(NDI, na.rm = TRUE),
         Age = Age/10
       )
     ][, `:=` (
