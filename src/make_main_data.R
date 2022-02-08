@@ -20,16 +20,10 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   
   # load phecode data ----------
   icd_phecode_tested    <- load_icd_phecode_tested_data()
-  icd_phecode_unmatched <- load_icd_phecode_unmatched_data()
-  
-  icd_phecode_tested    <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
-  icd_phecode_unmatched <- sex_concordance_check(x = icd_phecode_unmatched, tested = FALSE)
-  
-  icd_phecode <- rbindlist(list(icd_phecode_tested, icd_phecode_unmatched))
+  icd_phecode           <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
   
   # get ids -----------
   codes <- readRDS("~/projects/covid/new_cancer/lists/cancer_codes.rds")
-  
   
   skin_cancer_ids     <- get_ids(x = icd_phecode, filter_codes = codes$skin_cancer_phecodes)
   heme_malign_ids     <- get_ids(x = icd_phecode, filter_codes = codes$heme_malign_phecodes)
@@ -47,18 +41,11 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
     tested_phenome_ids = icd_phecode_tested[, id],
     cancer_tested_ids  = cancer[tested == 1, id]
   )
-  unmatched_cov_data <- load_unmatched_covariate_data(
-    unmatched_phenome_ids = icd_phecode_unmatched[, id],
-    cancer_untested_ids   = cancer[tested == 0, id]
-  )
-  
-  # remove unmatched in tested ----------
-  unmatched_to_exclude <- unmatched_cov_data[, id][unmatched_cov_data[, id] %in% tested_cov_data[, id]]
-  
-  unmatched_cov_data <- unmatched_cov_data[id %notin% unmatched_to_exclude]
   
   # cancer treatment data -----------
   cli::cli_alert_info("loading cancer treatment data")
+  
+  unmatched_to_exclude <- c("")
   
   procedures <- load_procedure_data(exclude_ids = unmatched_to_exclude)
   
@@ -97,8 +84,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   cli::cli_alert_info("calculating last date of cancer treatment")
   
   c19_test_or_dx <- rbindlist(list(
-    tested_cov_data[, .(id, dsb_c19_test_or_dx = dsb_earliest_test_dx_date)],
-    unmatched_cov_data[, .(id, dsb_c19_test_or_dx = DaysSinceBirth_EARLIEST_TEST_OR_DX)]))[!is.na(dsb_c19_test_or_dx)]
+    tested_cov_data[, .(id, dsb_c19_test_or_dx = dsb_earliest_test_dx_date)]))[!is.na(dsb_c19_test_or_dx)]
   
   last_radiation <- get_last_dsb(cpt_dat = rad_cpt, icd_dat = rad_icd, c19_dsb = c19_test_or_dx, treatment = "radiation")
   last_chemo <- get_last_dsb(cpt_dat = chemo_cpt, icd_dat = chemo_icd, c19_dsb = c19_test_or_dx, treatment = "chemo")
@@ -149,10 +135,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
                    "Type2Diabetes", "KidneyDiseases",
                    "LiverDiseases", "AutoimmuneDiseases")
   
-  combined <- rbindlist(list(
-    tested_cov_data[, Outcome := OutcomeMax][],
-    unmatched_cov_data
-  ), fill = TRUE)[, (num_vars) := lapply(.SD, as.numeric), .SDcols = num_vars][]
+  combined <- tested_cov_data[`Test Results` == 1 & in_phenome == 1][, Outcome := OutcomeMax][, (num_vars) := lapply(.SD, as.numeric), .SDcols = num_vars]
   
   combined <- combined[, ComborbidityScore.old := as.numeric(ComorbidityScore)][
     , ComorbidityScore := RespiratoryDiseases + CirculatoryDiseases + Type2Diabetes + KidneyDiseases + LiverDiseases + AutoimmuneDiseases
@@ -226,7 +209,36 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
     all = TRUE
   )
   
+  # add vaccination variable
   combined <- get_pre_positive_vax_status(x = combined)[in_phenome == 1]
+  
+  # add cancer types and treatment variables
+  # create cancer_treatment variable ----------
+  combined <- combined[, cancer_treatment := fifelse(
+    chemo == 1 & AnyCancerPhe == 1, "Chemotherapy", fifelse(
+      rad_only == 1 & AnyCancerPhe == 1, "Radiation Only", fifelse(
+        surgery_only == 1 & AnyCancerPhe == 1, "Surgery Only", fifelse(
+          AnyCancerPhe == 1, "No treatment/Unknown", "No cancer"
+        )
+      )
+    )
+  )][!is.na(AnyCancerPhe)][]
+  
+  # create cancer type variable ----------
+  combined[skin_cancer == 1, cancer_type := "Melanoma"]
+  combined[heme_malign == 1, cancer_type := "Hematologic malignancy"]
+  combined[breast_cancer == 1, cancer_type := "Breast cancer"]
+  combined[prostate_cancer == 1, cancer_type := "Prostate cancer"]
+  combined[lung_cancer == 1, cancer_type := "Lung cancer"]
+  combined[is.na(cancer_type) & AnyCancerPhe == 1, cancer_type := "Other cancer"]
+  combined[is.na(cancer_type) & AnyCancerPhe == 0, cancer_type := "No cancer"]
+  
+  # factorize variables and set reference groups -------------
+  combined[, cancer_treatment := relevel(factor(cancer_treatment), ref = "No cancer")]
+  combined[, cancer_type := relevel(factor(cancer_type), ref = "No cancer")]
+  
+  # add recent cancer variables -----------
+  
   
   if (save == TRUE) {
     cli::cli_alert_info("saving main_data object")
