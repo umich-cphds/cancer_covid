@@ -1,4 +1,4 @@
-cascade_analysis <- function(data, exposure, outcome, kable_digits = NULL) {
+cascade_analysis <- function(data, exposure, outcome, env_name = .GlobalEnv, kable_digits = NULL) {
   
   # model setup ---------
   glm_mod_text     <- glue::glue("glm({outcome} ~ factor({exposure}), data = {data}, family = 'binomial')")
