@@ -7,9 +7,9 @@ source("lists/adjustment_sets.R")
 main <- make_main_data()
 
 # main analyses -----------
-any_cancer       <- main_analysis(dataset = main, exposure_var = "AnyCancerPhe")
-cancer_type      <- main_analysis(dataset = main, exposure_var = "cancer_type")
-cancer_treatment <- main_analysis(dataset = main, exposure_var = "cancer_treatment")
+any_cancer       <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
+cancer_type      <- main_analysis(dataset = "main", exposure_var = "cancer_type")
+cancer_treatment <- main_analysis(dataset = "main", exposure_var = "cancer_treatment")
 
   # interaction analyses -----------
   main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe")
