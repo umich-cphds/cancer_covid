@@ -1,8 +1,8 @@
 # Loads, manipulates, and prepares clean data file for analysis
-make_main_data <- function(force = FALSE, save = TRUE) {
+make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   
   if (force == FALSE) {
-    if (file.exists("objects/main_data.rds")) {
+    if (file.exists("objects/main_data.rds") & quick_skip = FALSE) {
       
       skip <- readline(prompt = "`objects/main_data.rds` already exists. Run anyway (y/n)? ")
       
@@ -11,6 +11,11 @@ make_main_data <- function(force = FALSE, save = TRUE) {
       }
       
     }
+    
+    if (file.exists("objects/main_data.rds") & quick_skip = TRUE) {
+      stop("`objects/main_data.rds` exists. skipping data processing.")
+    }
+    
   }
   
   # load phecode data ----------
@@ -23,7 +28,7 @@ make_main_data <- function(force = FALSE, save = TRUE) {
   icd_phecode <- rbindlist(list(icd_phecode_tested, icd_phecode_unmatched))
   
   # get ids -----------
-  codes <- readRDS("~/projects/covid/new/lists/cancer_codes.rds")
+  codes <- readRDS("~/projects/covid/new_cancer/lists/cancer_codes.rds")
   
   
   skin_cancer_ids     <- get_ids(x = icd_phecode, filter_codes = codes$skin_cancer_phecodes)

@@ -201,6 +201,99 @@ get_ids <- function(x, filter_codes) {
 
 }
 
+# quick and simple code filter -----------
+code_filter <- function(x, codes) {
+  x[ProcedureCode %in% codes | grepl(paste0("^", codes, "[^0-9]", sep = "", collapse = "|"), ProcedureCode)][]
+}
+
+# get last days since birth ----------
+get_last_dsb <- function(cpt_dat, icd_dat, c19_dsb, treatment) {
+  
+  tmp_cpt_dat <- cpt_dat[, .SD[ProcedureDate_DaysSinceBirth == max(ProcedureDate_DaysSinceBirth, na.rm = TRUE)], by = "id"]
+  tmp_icd_dat <- icd_dat[, .SD[DaysSinceBirth == max(DaysSinceBirth, na.rm = TRUE)], by = "id"]
+  
+  tmp <- merge.data.table(
+    tmp_cpt_dat[, .(id, cpt_dsb = ProcedureDate_DaysSinceBirth)],
+    tmp_icd_dat[, .(id, icd_dsb = DaysSinceBirth)],
+    by = "id"
+  )[, dsb_last := pmax(cpt_dsb, icd_dsb, na.rm = TRUE)][]
+  
+  tmp <- merge.data.table(
+    tmp,
+    c19_dsb,
+    by = "id"
+  )[, treatment_2years := fifelse((dsb_last - dsb_c19_test_or_dx) < -730, 1, 0)][
+    , treatment_2years := fifelse(is.na(treatment_2years), 0, treatment_2years)
+  ]
+  
+  tmp <- unique(tmp)
+  
+  setnames(tmp, old = c("dsb_last", "treatment_2years"), new = c(paste0("dsb_last_", treatment), paste0(treatment, "_2years")))
+  
+  return(tmp)
+  
+}
+
+# get vaccine status prior to first positive test variable -----------
+get_pre_positive_vax_status <- function(x, days_before = 14) {
+  
+  # subset to individuals with non-missing vaccine data
+  vax <- x[!is.na(Vaccine)]
+  
+  # drop individuals with missing DSB for vaccine data
+  missing_first_vax <- vax[!is.na(Vaccine) & (is.na(DaysSinceBirth_FirstVaccination)), unique(id)]
+  missing_full_vax  <- vax[!is.na(Vaccine) & (TotalNumberVaccinations > 1 & is.na(DaysSinceBirth_FullyVaccinated)), unique(id)]
+  vax               <- vax[!(id %in% c(missing_first_vax, missing_full_vax))]
+  
+  # limit to FDA-approved vaccines
+  fda_approved <- c("Janssen", "Moderna", "Pfizer")
+  vax          <- vax[Vaccine %in% fda_approved]
+  
+  # create vaccine status prior to first positive tested indicator variables
+  # UNVACCINATED
+  vax <- vax[, `:=` (
+    unvaccinated = as.numeric(DaysSinceBirth_First_PositiveTestDiagnosis <= (DaysSinceBirth_FirstVaccination - days_before))
+  )]
+  
+  # PARTIALLY VACCINATED
+  vax <- vax[, `:=` (
+    partial_vax = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis > (DaysSinceBirth_FirstVaccination - days_before)) &
+                               (DaysSinceBirth_First_PositiveTestDiagnosis < (DaysSinceBirth_FullyVaccinated - days_before)))
+  )]
+  
+  # FULLY VACCINATED NO BOOSTER
+  vax <- vax[, `:=` (
+    full_vax = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FullyVaccinated - days_before)) &
+                            (DaysSinceBirth_First_PositiveTestDiagnosis < (DaysSinceBirth_FirstBooster + 21 - days_before)))
+  )]
+  
+  # FULLY VACCINATED WITH BOOSTER
+  vax <- vax[, `:=` (
+    boosted = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FullyVaccinated - days_before)) &
+                           (DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FirstBooster + 21 - days_before)))
+  )]
+  
+  # create a single vaccine status variable
+  vax[, vax_status := "Unvaccinated/Unknown"]
+  vax[boosted == 1, vax_status := "Boosted"]
+  vax[full_vax == 1, vax_status := "Fully vaccinated"]
+  vax[partial_vax == 1, vax_status := "Partially vaccinated"]
+  vax[id %in% c(missing_first_vax, missing_full_vax), vax_status := NA]
+  
+  out <- merge.data.table(
+    x[in_phenome == 1],
+    vax[, .(id, vax_status)],
+    by = "id",
+    all.x = TRUE
+  )
+  
+  out[is.na(Vaccine), vax_status := "Unvaccinated/Unknown"]
+  
+  # replace individuals with non-fda approved vaccines as missing
+  out[(!(Vaccine %in% fda_approved) & !is.na(Vaccine)), vax_status := NA][]
+  
+}
+
 ###########
 ### OLD ###
 ###########
@@ -227,39 +320,6 @@ get_ids <- function(x, filter_codes) {
 #   return(out)
 #   
 # }
-# 
-# 
-# code_filter <- function(x, codes) {
-#   x[ProcedureCode %in% codes | grepl(paste0("^", codes, "[^0-9]", sep = "", collapse = "|"), ProcedureCode)][]
-# }
-# 
-# get_last_dsb <- function(cpt_dat, icd_dat, c19_dsb, treatment) {
-#   
-#   tmp_cpt_dat <- cpt_dat[, .SD[ProcedureDate_DaysSinceBirth == max(ProcedureDate_DaysSinceBirth, na.rm = TRUE)], by = "id"]
-#   tmp_icd_dat <- icd_dat[, .SD[DaysSinceBirth == max(DaysSinceBirth, na.rm = TRUE)], by = "id"]
-#   
-#   tmp <- merge.data.table(
-#     tmp_cpt_dat[, .(id, cpt_dsb = ProcedureDate_DaysSinceBirth)],
-#     tmp_icd_dat[, .(id, icd_dsb = DaysSinceBirth)],
-#     by = "id"
-#   )[, dsb_last := pmax(cpt_dsb, icd_dsb, na.rm = TRUE)][]
-#   
-#   tmp <- merge.data.table(
-#     tmp,
-#     c19_dsb,
-#     by = "id"
-#   )[, treatment_2years := fifelse((dsb_last - dsb_c19_test_or_dx) < -730, 1, 0)][
-#     , treatment_2years := fifelse(is.na(treatment_2years), 0, treatment_2years)
-#   ]
-#   
-#   tmp <- unique(tmp)
-#   
-#   setnames(tmp, old = c("dsb_last", "treatment_2years"), new = c(paste0("dsb_last_", treatment), paste0(treatment, "_2years")))
-#   
-#   return(tmp)
-#   
-# }
-# 
 # 
 # # print tidy model output ----------
 # tidy_model_output <- function(mod, kable_digits = NULL) {
@@ -531,70 +591,6 @@ get_ids <- function(x, filter_codes) {
 #     full = tmp_out,
 #     tidy = tidy_out
 #   )
-#   
-# }
-# 
-# 
-# 
-# 
-# 
-# # get vaccine status prior to first positive test variable -----------
-# get_pre_positive_vax_status <- function(x, days_before = 14) {
-#   
-#   # subset to individuals with non-missing vaccine data
-#   vax <- x[!is.na(Vaccine)]
-#   
-#   # drop individuals with missing DSB for vaccine data
-#   missing_first_vax <- vax[!is.na(Vaccine) & (is.na(DaysSinceBirth_FirstVaccination)), unique(id)]
-#   missing_full_vax  <- vax[!is.na(Vaccine) & (TotalNumberVaccinations > 1 & is.na(DaysSinceBirth_FullyVaccinated)), unique(id)]
-#   vax               <- vax[!(id %in% c(missing_first_vax, missing_full_vax))]
-#   
-#   # limit to FDA-approved vaccines
-#   fda_approved <- c("Janssen", "Moderna", "Pfizer")
-#   vax          <- vax[Vaccine %in% fda_approved]
-#   
-#   # create vaccine status prior to first positive tested indicator variables
-#   # UNVACCINATED
-#   vax <- vax[, `:=` (
-#     unvaccinated = as.numeric(DaysSinceBirth_First_PositiveTestDiagnosis <= (DaysSinceBirth_FirstVaccination - days_before))
-#   )]
-#   
-#   # PARTIALLY VACCINATED
-#   vax <- vax[, `:=` (
-#     partial_vax = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis > (DaysSinceBirth_FirstVaccination - days_before)) &
-#                                (DaysSinceBirth_First_PositiveTestDiagnosis < (DaysSinceBirth_FullyVaccinated - days_before)))
-#   )]
-#   
-#   # FULLY VACCINATED NO BOOSTER
-#   vax <- vax[, `:=` (
-#     full_vax = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FullyVaccinated - days_before)) &
-#                             (DaysSinceBirth_First_PositiveTestDiagnosis < (DaysSinceBirth_FirstBooster + 21 - days_before)))
-#   )]
-#   
-#   # FULLY VACCINATED WITH BOOSTER
-#   vax <- vax[, `:=` (
-#     boosted = as.numeric((DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FullyVaccinated - days_before)) &
-#                            (DaysSinceBirth_First_PositiveTestDiagnosis >= (DaysSinceBirth_FirstBooster + 21 - days_before)))
-#   )]
-#   
-#   # create a single vaccine status variable
-#   vax[, vax_status := "Unvaccinated/Unknown"]
-#   vax[boosted == 1, vax_status := "Boosted"]
-#   vax[full_vax == 1, vax_status := "Fully vaccinated"]
-#   vax[partial_vax == 1, vax_status := "Partially vaccinated"]
-#   vax[id %in% c(missing_first_vax, missing_full_vax), vax_status := NA]
-#   
-#   out <- merge.data.table(
-#     x[in_phenome == 1],
-#     vax[, .(id, vax_status)],
-#     by = "id",
-#     all.x = TRUE
-#   )
-#   
-#   out[is.na(Vaccine), vax_status := "Unvaccinated/Unknown"]
-#   
-#   # replace individuals with non-fda approved vaccines as missing
-#   out[(!(Vaccine %in% fda_approved) & !is.na(Vaccine)), vax_status := NA][]
 #   
 # }
 # 
