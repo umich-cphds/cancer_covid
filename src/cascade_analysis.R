@@ -1,4 +1,4 @@
-cascade_analysis <- function(data, outcome, kable_digits = NULL, outcome_level = 1, exposure_level = 1) {
+cascade_analysis <- function(data, exposure, outcome, kable_digits = NULL) {
   
   # model setup ---------
   glm_mod_text     <- glue::glue("glm({outcome} ~ factor({exposure}), data = {data}, family = 'binomial')")
@@ -21,11 +21,7 @@ cascade_analysis <- function(data, outcome, kable_digits = NULL, outcome_level =
   adjustment2      <- tidy_model_output(mod = adj2_mod, kable_digits = kable_digits)
   adjustment3      <- tidy_model_output(mod = adj3_mod, kable_digits = kable_digits)
   
-  # results list -----------
-  
-  #n_total    = na.omit(DT[, ..adj_sets[['adj1']]])[, .N]
-  #n_outcome  = na.omit(DT[, c(outcome, [['adj1']])][outcome == 1][, .N])
-  #n_exposure = na.omit(DT[, c(exposure, [['adj1']])][exposure == 1][, .N])
+  # results list ----------
   
   list(
     unadjusted       = unadjusted |> mutate(nobs = nobs(glm_mod)),
