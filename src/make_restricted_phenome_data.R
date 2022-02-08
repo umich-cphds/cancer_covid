@@ -236,7 +236,7 @@ make_restricted_phenome_data <- function(input) {
   combined[, recent_cancer_type := relevel(factor(recent_cancer_type), ref = "No cancer")]
   
   # keep only recent variables
-  keep_these <- c(id, names(combined)[grepl("recent*", names(combined))])
+  keep_these <- c("id", names(combined)[grepl("recent*", names(combined))])
   
   combined[, ..keep_these]
   
