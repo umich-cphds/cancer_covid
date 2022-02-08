@@ -180,6 +180,7 @@ make_restricted_phenome_data <- function(input) {
         Age = Age/10
       )
     ][, `:=` (
+      recent_AnyCancerPhe    = fifelse(id %in% cancer_ids, 1, 0),
       recent_skin_cancer     = fifelse(id %in% skin_cancer_ids, 1, 0),
       recent_heme_malign     = fifelse(id %in% heme_malign_ids, 1, 0),
       recent_breast_cancer   = fifelse(id %in% breast_cancer_ids, 1, 0),
@@ -212,10 +213,10 @@ make_restricted_phenome_data <- function(input) {
   # add cancer types and treatment variables
   # create recent_cancer_treatment variable ----------
   combined <- combined[, recent_cancer_treatment := fifelse(
-    chemo == 1 & AnyCancerPhe == 1, "Chemotherapy", fifelse(
-      rad_only == 1 & AnyCancerPhe == 1, "Radiation Only", fifelse(
-        surgery_only == 1 & AnyCancerPhe == 1, "Surgery Only", fifelse(
-          AnyCancerPhe == 1, "No treatment/Unknown", "No cancer"
+    recent_chemo == 1 & recent_AnyCancerPhe == 1, "Chemotherapy", fifelse(
+      recent_rad_only == 1 & recent_AnyCancerPhe == 1, "Radiation Only", fifelse(
+        recent_surgery_only == 1 & recent_AnyCancerPhe == 1, "Surgery Only", fifelse(
+          recent_AnyCancerPhe == 1, "No treatment/Unknown", "No cancer"
         )
       )
     )
