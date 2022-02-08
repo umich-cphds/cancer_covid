@@ -2,7 +2,7 @@
 make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   
   if (force == FALSE) {
-    if (file.exists("objects/main_data.rds") & quick_skip = FALSE) {
+    if (file.exists("objects/main_data.rds") & quick_skip == FALSE) {
       
       skip <- readline(prompt = "`objects/main_data.rds` already exists. Run anyway (y/n)? ")
       
@@ -12,7 +12,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
       
     }
     
-    if (file.exists("objects/main_data.rds") & quick_skip = TRUE) {
+    if (file.exists("objects/main_data.rds") & quick_skip == TRUE) {
       stop("`objects/main_data.rds` exists. skipping data processing.")
     }
     
