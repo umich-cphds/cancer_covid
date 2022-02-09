@@ -61,7 +61,6 @@ interaction_analysis <- function(dataset,
       dataset    = dataset,
       exposure   = comorbidities[i],
       outcome    = "ICU",
-      covariates = c(adj_sets[["adj3"]], interaction_var),
       covariates = tmp_covariates,
       env_name   = env_name,
       int        = interaction_var

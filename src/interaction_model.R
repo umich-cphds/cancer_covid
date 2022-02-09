@@ -1,6 +1,6 @@
 interaction_model <- function(dataset, exposure, outcome, covariates, env_name = .GlobalEnv, int = NULL, kable_digits = NULL) {
  
-  tmp_covariates <- covariates[covariates %notin% c("Age", exposure)]
+  tmp_covariates <- covariates[covariates %notin% c(exposure)]
   
   if (exposure %in% c("RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes",
                       "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")) {

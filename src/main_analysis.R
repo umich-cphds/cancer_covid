@@ -4,6 +4,12 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", model_term = N
     model_term <- paste0("factor\\(", exposure_var, "\\)")
   }
   
+  severe_covid <- cascade_analysis(
+    data       = dataset,
+    exposure   = exposure_var,
+    outcome    = "`Severe COVID`"
+  )
+  
   hospitalized <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
@@ -22,15 +28,18 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", model_term = N
     outcome    = "Deceased"
   )
 
+  tidy_severe <- extract_cascade_estimates(results = severe_covid, outcome = "Severe COVID", mod_term = model_term)
   tidy_hosp  <- extract_cascade_estimates(results = hospitalized, outcome = "Hospitalized", mod_term = model_term)
   tidy_icu   <- extract_cascade_estimates(results = icu, outcome = "ICU", mod_term = model_term)
   tidy_death <- extract_cascade_estimates(results = death, outcome = "Deceased", mod_term = model_term)
   
   list(
+    severe_covid = tidy_severe,
     hospitalized = tidy_hosp,
     icu          = tidy_icu,
     deceased     = tidy_death,
-    clean        = tidy_hosp$tidy %>%
+    clean        = tidy_severe$tidy %>%
+      left_join(tidy_hosp$tidy, by = c("model", "term"))  %>%
       left_join(tidy_icu$tidy, by = c("model", "term")) %>%
       left_join(tidy_death$tidy, by = c("model", "term"))
   )
