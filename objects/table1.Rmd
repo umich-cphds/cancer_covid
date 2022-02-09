@@ -34,7 +34,7 @@ covar <- readRDS("objects/whole_data.rds")
 
 ```{r recode_comorbs}
 # recode comorbidities ----------
-comorbs <- c("AnyCancerPhe", "AnyCancer", "RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes", "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")
+comorbs <- c("recent_AnyCancerPhe", "AnyCancerPhe", "AnyCancer", "RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes", "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")
 
 covar <- covar %>% 
   mutate_at(comorbs, helper.function) %>% 
