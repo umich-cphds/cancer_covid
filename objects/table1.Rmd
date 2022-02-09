@@ -26,7 +26,7 @@ helper.function2 <- function(x) {
 
 ```{r load_data}
 if (getwd() != "/net/wonderland/home/mmsalva/projects/covid/new_cancer") {
-  setwd("/net/wonderland/home/mmsalva/projects/covid/new_covid")
+  setwd("/net/wonderland/home/mmsalva/projects/covid/new_cancer")
 }
 covar <- readRDS("objects/whole_data.rds")
 ```
