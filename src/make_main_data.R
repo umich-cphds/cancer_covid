@@ -2,18 +2,20 @@
 make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   
   if (force == FALSE) {
-    if (file.exists("objects/main_data.rds") & quick_skip == FALSE) {
+    if (file.exists("objects/whole_data.rds") & quick_skip == FALSE) {
       
-      skip <- readline(prompt = "`objects/main_data.rds` already exists. Run anyway (y/n)? ")
+      skip <- readline(prompt = "`objects/whole_data.rds` already exists. Run anyway (y/n)? ")
       
-      if (tolower(substr(as.character(skip), 1, 1)) == "y") {
+      if (tolower(substr(as.character(skip), 1, 1)) == "n") {
         stop()
       }
       
+      cli::cli_alert_info("running `make_main_data`...")
+      
     }
     
-    if (file.exists("objects/main_data.rds") & quick_skip == TRUE) {
-      stop("`objects/main_data.rds` exists. skipping data processing.")
+    if (file.exists("objects/whole_data.rds") & quick_skip == TRUE) {
+      stop("`objects/whole_data.rds` exists. skipping data processing.")
     }
     
   }
