@@ -4,7 +4,7 @@ for (f in list.files("src/")) {source(paste0("src/", f))}
 source("lists/adjustment_sets.R")
 
 # data -----------
-whole <- make_main_data()
+whole <- make_main_data(quick_skip = TRUE)
 main  <- whole[`Test Results` == 1]
 
 # main analyses -----------
@@ -21,8 +21,8 @@ results_to_workbook(results = cancer_type)
 results_to_workbook(results = cancer_treatment)
 
   # interaction analyses -----------
-  main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe")
-  main_interaction_cancer_reference <- ""
+  main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "0")
+  main_interaction_cancer_reference <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "1")
 
 # recent cancer analyses ----------
 recent_any_cancer       <- main_analysis(dataset = "main", exposure_var = "recent_AnyCancerPhe")
@@ -38,11 +38,13 @@ results_to_workbook(results = recent_cancer_type)
 results_to_workbook(results = recent_cancer_treatment)
 
   # interaction analyses ----------
-  recent_interaction <- interaction_analysis(dataset = "main", interaction_var = "recent_AnyCancerPhe")
+  recent_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "recent_AnyCancerPhe")
   recent_interaction_cancer_reference <- ""
 
 # vaccination analyses ----------
   
 # plots and figures -----------
+source("lists/n_by_adjustment_set.R")
+  
 make_bar_plot(data_input = main)
 make_recent_bar_plot(data_input = main)

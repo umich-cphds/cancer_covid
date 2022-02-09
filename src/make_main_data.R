@@ -15,7 +15,8 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
     }
     
     if (file.exists("objects/whole_data.rds") & quick_skip == TRUE) {
-      stop("`objects/whole_data.rds` exists. skipping data processing.")
+      cli::cli_alert_info("`objects/whole_data.rds` exists. skipping data processing.")
+      readRDS("objects/whole_data.rds")
     }
     
   }

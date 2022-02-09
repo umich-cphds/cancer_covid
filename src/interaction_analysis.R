@@ -6,9 +6,11 @@ interaction_analysis <- function(dataset,
                                                "ethnicimmigrant13_17_qrtl", "ped1_13_17_qrtl", "ComorbidityScore"),
                                  comorbidities = c("RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes",
                                                    "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases"),
-                                 interaction_var = "AnyCancerPhe") {
+                                 interaction_var = "AnyCancerPhe",
+                                 reference_level = "0") {
   
   # interaction models ----------
+  sev_int_mods <- list()
   hos_int_mods <- list()
   icu_int_mods <- list()
   
@@ -18,13 +20,24 @@ interaction_analysis <- function(dataset,
     
     cli::cli_alert("fitting {exposures[i]} exposure model")
     
+    sev_int_mods[[exposures[i]]] <- interaction_model(
+      dataset    = dataset,
+      exposure   = exposures[i],
+      outcome    = "`Severe COVID`",
+      covariates = tmp_covariates,
+      env_name   = env_name,
+      int        = interaction_var,
+      ref        = reference_level
+    )
+    
     hos_int_mods[[exposures[i]]] <- interaction_model(
       dataset    = dataset,
       exposure   = exposures[i],
       outcome    = "Hospitalized",
       covariates = tmp_covariates,
       env_name   = env_name,
-      int        = interaction_var
+      int        = interaction_var,
+      ref        = reference_level
     )
     
     icu_int_mods[[exposures[i]]] <- interaction_model(
@@ -33,12 +46,14 @@ interaction_analysis <- function(dataset,
       outcome    = "ICU",
       covariates = tmp_covariates,
       env_name   = env_name,
-      int        = interaction_var
+      int        = interaction_var,
+      ref        = reference_level
     )
     
   }
   
   # comorbidity models ---------
+  sev_comorbid_mods <- list()
   hos_comorbid_mods <- list()
   icu_comorbid_mods <- list()
   
@@ -48,13 +63,24 @@ interaction_analysis <- function(dataset,
     
     tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[c(adj_sets[["adj3"]], interaction_var) %notin% comorbidities[i]]
     
+    sev_comorbid_mods[[comorbidities[i]]] <- interaction_model(
+      dataset    = dataset,
+      exposure   = comorbidities[i],
+      outcome    = "`Severe COVID`",
+      covariates = tmp_covariates,
+      env_name   = env_name,
+      int        = interaction_var,
+      ref        = reference_level
+    )
+    
     hos_comorbid_mods[[comorbidities[i]]] <- interaction_model(
       dataset    = dataset,
       exposure   = comorbidities[i],
       outcome    = "Hospitalized",
       covariates = tmp_covariates,
       env_name   = env_name,
-      int        = interaction_var
+      int        = interaction_var,
+      ref        = reference_level
     )
     
     icu_comorbid_mods[[comorbidities[i]]] <- interaction_model(
@@ -63,15 +89,18 @@ interaction_analysis <- function(dataset,
       outcome    = "ICU",
       covariates = tmp_covariates,
       env_name   = env_name,
-      int        = interaction_var
+      int        = interaction_var,
+      ref        = reference_level
     )
     
   }
   
   return(
     list(
+      sev_int_mods      = sev_int_mods,
       hos_int_mods      = hos_int_mods,
       icu_int_mods      = icu_int_mods,
+      sev_comorbid_mods = sev_comorbid_mods,
       hos_comorbid_mods = hos_comorbid_mods,
       icu_comorbid_mods = icu_comorbid_mods
     )
