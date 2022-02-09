@@ -1,22 +1,22 @@
 interaction_model <- function(dataset, exposure, outcome, covariates, env_name = .GlobalEnv, int = NULL, kable_digits = NULL) {
  
-  tmp_covariates <- covariates[!covariates == exposure]
+  tmp_covariates <- covariates[covariates %notin% c(exposure)]
   
   if (exposure %in% c("RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes",
                       "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")) {
     
     if (is.null(int)) {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure}))))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure}))), control = logistf.control(maxit = 1000))")
     } else {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure}))))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure}))), control = logistf.control(maxit = 1000))")
     }
     
   } else {
     
     if (is.null(int)) {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset})")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset}, control = logistf.control(maxit = 1000))")
     } else {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset})")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset}, control = logistf.control(maxit = 1000))")
     }
     
   }

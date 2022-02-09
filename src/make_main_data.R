@@ -135,7 +135,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
                    "Type2Diabetes", "KidneyDiseases",
                    "LiverDiseases", "AutoimmuneDiseases")
   
-  combined <- tested_cov_data[`Test Results` == 1 & in_phenome == 1][, Outcome := OutcomeMax][, (num_vars) := lapply(.SD, as.numeric), .SDcols = num_vars]
+  combined <- tested_cov_data[in_phenome == 1][, Outcome := OutcomeMax][, (num_vars) := lapply(.SD, as.numeric), .SDcols = num_vars]
   
   combined <- combined[, ComborbidityScore.old := as.numeric(ComorbidityScore)][
     , ComorbidityScore := RespiratoryDiseases + CirculatoryDiseases + Type2Diabetes + KidneyDiseases + LiverDiseases + AutoimmuneDiseases
@@ -244,8 +244,10 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   )
   
   if (save == TRUE) {
-    cli::cli_alert_info("saving main_data object")
-    saveRDS(object = combined, file = "objects/main_data.rds")
+    cli::cli_alert_info("saving whole_data object")
+    saveRDS(object = combined, file = "objects/whole_data.rds")
+    cli::cli_alert_info("saving main_data object (tested positive only)")
+    saveRDS(object = combined[`Test Results == 1`], file = "objects/whole_data.rds")
   }
   
   return(combined)

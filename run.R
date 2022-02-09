@@ -4,7 +4,8 @@ for (f in list.files("src/")) {source(paste0("src/", f))}
 source("lists/adjustment_sets.R")
 
 # data -----------
-main <- make_main_data()
+whole <- make_main_data()
+main  <- whole[`Test Results` == 1]
 
 # main analyses -----------
 any_cancer       <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
@@ -41,3 +42,7 @@ results_to_workbook(results = recent_cancer_treatment)
   recent_interaction_cancer_reference <- ""
 
 # vaccination analyses ----------
+  
+# plots and figures -----------
+make_bar_plot(data_input = main)
+make_recent_bar_plot(data_input = main)
