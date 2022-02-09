@@ -6,17 +6,17 @@ interaction_model <- function(dataset, exposure, outcome, covariates, env_name =
                       "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")) {
     
     if (is.null(int)) {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure})), {interaction_var} = relevel(factor({interaction_var}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure})), {int} = relevel(factor({int}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
     } else {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure})), {interaction_var} = relevel(factor({interaction_var}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate(ComorbidityScore = ComorbidityScore - as.numeric(as.character({exposure})), {int} = relevel(factor({int}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
     }
     
   } else {
     
     if (is.null(int)) {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate({interaction_var} = relevel(factor({interaction_var}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')}, data = {dataset} %>% mutate({int} = relevel(factor({int}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
     } else {
-      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate({interaction_var} = relevel(factor({interaction_var}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
+      mod_text <- glue::glue("logistf({outcome} ~ {exposure} + {paste(tmp_covariates, collapse = ' + ')} + {int}:{exposure}, data = {dataset} %>% mutate({int} = relevel(factor({int}), ref = '{ref}')), control = logistf.control(maxit = 1000))")
     }
     
   }

@@ -9,22 +9,28 @@ whole <- readRDS("objects/whole_data.rds")
 main  <- whole[`Test Results` == 1]
 
 # main analyses -----------
-any_cancer       <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
-cancer_type      <- main_analysis(dataset = "main", exposure_var = "cancer_type")
-cancer_treatment <- main_analysis(dataset = "main", exposure_var = "cancer_treatment")
+any_cancer        <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
+cancer_type       <- main_analysis(dataset = "main", exposure_var = "cancer_type")
+cancer_treatment  <- main_analysis(dataset = "main", exposure_var = "cancer_treatment")
+no_heme_treatment <- main_analysis(dataset = "main[heme_malign == 0]", exposure_var = "cancer_treatment")
 
 saveRDS(object = any_cancer, file = "objects/any_cancer.rds")
 saveRDS(object = cancer_type, file = "objects/cancer_type.rds")
 saveRDS(object = cancer_treatment, file = "objects/cancer_treatment.rds")
+saveRDS(object = no_heme_treatment, file = "objects/no_heme_treatment.rds")
 
 results_to_workbook(results = any_cancer)
 results_to_workbook(results = cancer_type)
 results_to_workbook(results = cancer_treatment)
+results_to_workbook(results = no_heme_treatment)
 
   # interaction analyses -----------
   main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "0")
   main_interaction_cancer_reference <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "1")
 
+  saveRDS(object = main_interaction, file = "objects/main_interaction.rds")  
+  saveRDS(object = main_interaction_cancer_reference, file = "objects/main_interaction_cancer_reference.rds")
+  
 # recent cancer analyses ----------
 recent_any_cancer       <- main_analysis(dataset = "main", exposure_var = "recent_AnyCancerPhe")
 recent_cancer_type      <- main_analysis(dataset = "main", exposure_var = "recent_cancer_type")
