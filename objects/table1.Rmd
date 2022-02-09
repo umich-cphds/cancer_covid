@@ -81,6 +81,7 @@ labels <- list(
       ped1_13_17_qrtl          = "% less than high school diploma (qrtl)",
       ComorbidityScore         = "Comorbidity score",
       AnyCancerPhe             = "Any cancer",
+      recent_AnyCancerPhe      = "Recent cancer",
       AnyCancer                = "Any cancer (Lars variable)"
       ),
   groups = list("Tested", "Positive")
@@ -90,41 +91,10 @@ strata <- c(
   list(Overall = tested),
   split(tested, tested$`Test Results`), 
   list(
+    "Severe COVID" = subset(tested, tested$`Test Results` == "Positive" & `Severe COVID` == 1),
     "Hospitalized" = subset(tested, tested$`Test Results` == "Positive" & Hospitalized == 1),
     "ICU"          = subset(tested, tested$`Test Results` == "Positive" & ICU == 1),
     "Deceased"     = subset(tested, tested$`Test Results` == "Positive" & Deceased == 1)))
 
 table1(strata, labels, groupspan = c(2, 4))
-```
-
-```{r unmatched_desc}
-# unmatched descriptive table ----------
-labels <- list(
-  variables =
-    list(
-      Age                      = "Age",
-      AgeCategory              = "Age category",
-      Sex                      = "Sex",
-      `PrimaryCareMM_YN`       = "Primary care in MM", 
-      BMI                      = "BMI",
-      BMIcategory              = "BMI category",
-      SmokingStatus            = "Smoking status",
-      Drinker                  = "Alcohol consumption",
-      RaceEthnicity4           = "Race/ethnicity",
-      popden13_17_qrtl         = "Population density (qrtl)",
-      disadvantage2_13_17_qrtl = "Disadvantage (qrtl)",
-      affluence13_17_qrtl      = "Affluence (qrtl)",
-      ethnicimmigrant13_17_qrtl = "Ethnic/Immigrant (qrtl)",
-      ped1_13_17_qrtl          = "PED1 (qrtl)",
-      ComorbidityScore         = "Comorbidity score",
-      AnyCancerPhe             = "Any cancer",
-      AnyCancer                = "Any cancer (Lars variable)"
-      ))
-
-# unmatched <- droplevels(unmatched)
-
-strata <- c(list(Overall = unmatched),
-            split(unmatched, unmatched$AnyCancerPhe))
-
-table1(strata, labels, groupspan = c(1, 1))
 ```
