@@ -249,7 +249,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
     cli::cli_alert_info("saving whole_data object")
     saveRDS(object = combined, file = "objects/whole_data.rds")
     cli::cli_alert_info("saving main_data object (tested positive only)")
-    saveRDS(object = combined[`Test Results == 1`], file = "objects/whole_data.rds")
+    saveRDS(object = combined[`Test Results` == 1], file = "objects/whole_data.rds")
   }
   
   return(combined)
