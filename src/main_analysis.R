@@ -1,4 +1,8 @@
-main_analysis <- function(dataset, exposure_var = "AnyCancerPhe") {
+main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", model_term = NULL) {
+  
+  if (is.null(model_term)) {
+    model_term <- paste0("factor\\(", exposure_var, "\\)")
+  }
   
   hospitalized <- cascade_analysis(
     data       = dataset,
@@ -18,17 +22,17 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe") {
     outcome    = "Deceased"
   )
 
-  tidy_hosp  <- extract_cascade_estimates(results = hospitalized, outcome = "Hospitalized")
-  tidy_icu   <- extract_cascade_estimates(results = icu, outcome = "ICU")
-  tidy_death <- extract_cascade_estimates(results = death, outcome = "Deceased")
+  tidy_hosp  <- extract_cascade_estimates(results = hospitalized, outcome = "Hospitalized", mod_term = model_term)
+  tidy_icu   <- extract_cascade_estimates(results = icu, outcome = "ICU", mod_term = model_term)
+  tidy_death <- extract_cascade_estimates(results = death, outcome = "Deceased", mod_term = model_term)
   
   list(
     hospitalized = tidy_hosp,
     icu          = tidy_icu,
     deceased     = tidy_death,
     clean        = tidy_hosp$tidy %>%
-      left_join(tidy_icu$tidy, by = "model") %>%
-      left_join(tidy_death$tidy, by = "model")
+      left_join(tidy_icu$tidy, by = c("model", "term")) %>%
+      left_join(tidy_death$tidy, by = c("model", "term"))
   )
   
   
