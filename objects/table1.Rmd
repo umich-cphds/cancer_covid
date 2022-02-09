@@ -46,6 +46,7 @@ covar <- covar %>%
     affluence13_17_qrtl      = factor(affluence13_17_qrtl),
     ethnicimmigrant13_17_qrtl = factor(ethnicimmigrant13_17_qrtl),
     ped1_13_17_qrtl          = factor(ped1_13_17_qrtl),
+    vax_status               = factor(vax_status)
   )
 ```
 
@@ -82,6 +83,7 @@ labels <- list(
       ComorbidityScore         = "Comorbidity score",
       AnyCancerPhe             = "Any cancer",
       recent_AnyCancerPhe      = "Recent cancer",
+      vax_status               = "Vaccination status",
       AnyCancer                = "Any cancer (Lars variable)"
       ),
   groups = list("Tested", "Positive")
