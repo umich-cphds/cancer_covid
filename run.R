@@ -4,7 +4,8 @@ for (f in list.files("src/")) {source(paste0("src/", f))}
 source("lists/adjustment_sets.R")
 
 # data -----------
-whole <- make_main_data(quick_skip = TRUE)
+# whole <- make_main_data(quick_skip = TRUE)
+whole <- readRDS("objects/whole_data.rds")
 main  <- whole[`Test Results` == 1]
 
 # main analyses -----------
@@ -45,6 +46,8 @@ results_to_workbook(results = recent_cancer_treatment)
   
 # plots and figures -----------
 source("lists/n_by_adjustment_set.R")
+  
+rmarkdown::render("objects/table1.Rmd")
   
 make_bar_plot(data_input = main)
 make_recent_bar_plot(data_input = main)

@@ -10,14 +10,14 @@ data.table(
     "n_total",
     "n_severe", "n_hosp", "n_icu", "n_death",
     "n_chemo", "n_rad_only", "n_surg_only",
-    "n_skin", "n_heme", "n_breast", "n_prostate", "n_lung"),
+    "n_any", "n_skin", "n_heme", "n_breast", "n_prostate", "n_lung"),
   "n" = c(
     x[, .N],
     x[`Severe COVID` == 1, .N], x[Hospitalized == 1, .N], x[ICU == 1, .N], x[Deceased == 1, .N],
     x[chemo == 1, .N], x[rad_only == 1, .N], x[surgery_only == 1, .N],
-    x[skin_cancer == 1, .N], x[heme_malign == 1, .N], x[breast_cancer == 1, .N], x[prostate_cancer == 1, .N], x[lung_cancer == 1, .N]
+    x[AnyCancerPhe == 1, .N], x[skin_cancer == 1, .N], x[heme_malign == 1, .N], x[breast_cancer == 1, .N], x[prostate_cancer == 1, .N], x[lung_cancer == 1, .N]
   ),
-  "category" = c("total", rep("outcome", 4), rep("treatment", 3), rep("type", 5))
+  "category" = c("total", rep("outcome", 4), rep("treatment", 3), rep("type", 6))
   )
 }
 
@@ -26,7 +26,7 @@ tmp2 <- extract(x = n_adj2)
 tmp3 <- extract(x = n_adj3)
 
 simple <- merge(merge(
-  tmp1[, .(order = 1:13, type, category, `AdjSet1` = n)],
+  tmp1[, .(order = 1:14, type, category, `AdjSet1` = n)],
   tmp2[, .(type, `AdjSet2` = n)],
   by = "type"
 ),
