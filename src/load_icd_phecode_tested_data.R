@@ -1,6 +1,10 @@
 # load ICD phecode data ---------
-load_icd_phecode_tested_data <- function(cohort = "20220101") {
+load_icd_phecode_tested_data <- function(cohort = "20220202") {
   
+  if (cohort == "20220202") {
+    icd9_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220202/phenomes/UNFILTERED_20220202/UNFILTERED_20220202_ICD9_Phecodes_Birthyears.Rsav"
+    icd10_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220202/phenomes/UNFILTERED_20220202/UNFILTERED_20220202_ICD10_Phecodes_Birthyears.Rsav"
+  }
   if (cohort == "20220101") {
     icd9_path  <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220101/phenomes/UNFILTERED_20220101/UNFILTERED_20220101_ICD9_Phecodes_Birthyears.Rsav"
     icd10_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220101/phenomes/UNFILTERED_20220101/UNFILTERED_20220101_ICD10_Phecodes_Birthyears.Rsav"

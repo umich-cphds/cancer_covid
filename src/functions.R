@@ -2,7 +2,7 @@
 `%notin%` <- Negate(`%in%`)
 
 # sex concordance check ----------
-sex_concordance_check <- function(x, cohort = "20220101", tested = TRUE) {
+sex_concordance_check <- function(x, cohort = "20220202", tested = TRUE) {
 
   # phecode data
   pheinfo <- get(load(file = "/net/junglebook/michiganmedicine/larsf/data/phenomes/Phecode_Definitions_1.2_Full.Rsav"))
@@ -11,6 +11,10 @@ sex_concordance_check <- function(x, cohort = "20220101", tested = TRUE) {
   # demographic data
   if (tested == TRUE) {
 
+    if (cohort == "20220202") {
+      demo_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220202/MichiganMedicine_PCRcohort_plus_VaccinationData_20220202.Rsav"
+    }
+    
     if (cohort == "20220101") {
       demo_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220101/MichiganMedicine_PCRcohort_plus_VaccinationData_20220101.Rsav"
     }

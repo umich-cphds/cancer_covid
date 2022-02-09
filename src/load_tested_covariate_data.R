@@ -1,6 +1,9 @@
 # load covariate data ----------
-load_tested_covariate_data <- function(outvar, tested_phenome_ids, cancer_tested_ids, cohort = "20220101") {
+load_tested_covariate_data <- function(outvar, tested_phenome_ids, cancer_tested_ids, cohort = "20220202") {
   
+  if (cohort == "20220202") {
+    cov_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220202/MichiganMedicine_PCRcohort_plus_VaccinationData_20220202.Rsav"
+  }
   if (cohort == "20220101") {
     cov_path <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220101/MichiganMedicine_PCRcohort_plus_VaccinationData_20220101.Rsav"
   }
