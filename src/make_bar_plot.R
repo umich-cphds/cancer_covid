@@ -1,9 +1,13 @@
 make_bar_plot <- function(data_input) {
   
   sum_tab <- data.table(
-    comp = c(rep("Hospitalization", 3), rep("ICU admission", 3), rep("Fatality", 3)),
-    status = rep(c("All", "Cancer", "No cancer"), 3),
+    comp = c(rep("Severe COVID", 3), rep("Hospitalization", 3), rep("ICU admission", 3), rep("Fatality", 3)),
+    status = rep(c("All", "Cancer", "No cancer"), 4),
     outcome = c(
+      data_input[in_phenome == 1 & `Severe COVID` == 1, .N],
+      data_input[in_phenome == 1 & `Severe COVID` == 1 & AnyCancerPhe == 1, .N],
+      data_input[in_phenome == 1 & `Severe COVID` == 1 & AnyCancerPhe == 0, .N],
+      
       data_input[in_phenome == 1 & Hospitalized == 1, .N],
       data_input[in_phenome == 1 & Hospitalized == 1 & AnyCancerPhe == 1, .N],
       data_input[in_phenome == 1 & Hospitalized == 1 & AnyCancerPhe == 0, .N],
@@ -16,25 +20,16 @@ make_bar_plot <- function(data_input) {
       data_input[in_phenome == 1 & Deceased == 1 & AnyCancerPhe == 1, .N],
       data_input[in_phenome == 1 & Deceased == 1 & AnyCancerPhe == 0, .N]
     ),
-    total   = c(
+    total   = rep(c(
       data_input[in_phenome == 1, .N],
       data_input[in_phenome == 1 & AnyCancerPhe == 1, .N],
-      data_input[in_phenome == 1 & AnyCancerPhe == 0, .N],
-      
-      data_input[in_phenome == 1, .N],
-      data_input[in_phenome == 1 & AnyCancerPhe == 1, .N],
-      data_input[in_phenome == 1 & AnyCancerPhe == 0, .N],
-      
-      data_input[in_phenome == 1, .N],
-      data_input[in_phenome == 1 & AnyCancerPhe == 1, .N],
-      data_input[in_phenome == 1 & AnyCancerPhe == 0, .N]
-    )
+      data_input[in_phenome == 1 & AnyCancerPhe == 0, .N]), 4)
   )
   
   sum_tab[, prop := outcome / total][, `:=` (
     SE      = 100 * sqrt(prop * (1 - prop) / total),
     Percent = 100 * prop,
-    comp    = factor(comp, levels = c("Hospitalization", "ICU admission", "Fatality")))
+    comp    = factor(comp, levels = c("Severe COVID", "Hospitalization", "ICU admission", "Fatality")))
   ]
   
   display <- paste0(trimws(format(sum_tab[, outcome], big.mark = ",")),
