@@ -41,12 +41,13 @@ covar <- covar %>%
   mutate_at(comorbs, helper.function2) %>%
   droplevels() %>%
   mutate(
-    popden13_17_qrtl         = factor(popden13_17_qrtl), 
-    disadvantage2_13_17_qrtl = factor(disadvantage2_13_17_qrtl),
-    affluence13_17_qrtl      = factor(affluence13_17_qrtl),
+    popden13_17_qrtl          = factor(popden13_17_qrtl), 
+    disadvantage2_13_17_qrtl  = factor(disadvantage2_13_17_qrtl),
+    affluence13_17_qrtl       = factor(affluence13_17_qrtl),
     ethnicimmigrant13_17_qrtl = factor(ethnicimmigrant13_17_qrtl),
-    ped1_13_17_qrtl          = factor(ped1_13_17_qrtl),
-    vax_status               = factor(vax_status)
+    ped1_13_17_qrtl           = factor(ped1_13_17_qrtl),
+    vax_status                = factor(vax_status),
+    Age                       = Age * 10
   )
 ```
 
