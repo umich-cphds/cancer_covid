@@ -52,6 +52,7 @@ results_to_workbook(results = recent_cancer_treatment)
   saveRDS(object = recent_interaction_cancer_reference, file = "objects/recent_interaction_cancer_reference.rds")
 
 # vaccination analyses ----------
+main[, vax_status := relevel(factor(vax_status), ref = "Unvaccinated/Unknown")]
 cancer_vax  <- main_analysis(dataset = "main", exposure_var = "vax_status", interaction_var = "AnyCancerPhe")
 saveRDS(object = cancer_vax, file = "objects/cancer_vax.rds")
 results_to_workbook(results = cancer_vax)

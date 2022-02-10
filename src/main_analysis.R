@@ -4,6 +4,8 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_va
     model_term <- paste0("factor\\(", exposure_var, "\\)")
   }
   
+  
+  cli::cli_alert_info("severe covid analysis...")
   severe_covid <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
@@ -11,6 +13,7 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_va
     int        = interaction_var
   )
   
+  cli::cli_alert_info("hospitalization analysis...")
   hospitalized <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
@@ -18,6 +21,7 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_va
     int        = interaction_var
   )
   
+  cli::cli_alert_info("icu admission analysis...")
   icu          <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
@@ -25,6 +29,7 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_va
     int        = interaction_var
   )
   
+  cli::cli_alert_info("death analysis...")
   death        <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
@@ -32,6 +37,7 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_va
     int        = interaction_var
   )
 
+  cli::cli_alert_info("tidying up...")
   tidy_severe <- extract_cascade_estimates(results = severe_covid, outcome = "Severe COVID", mod_term = model_term)
   tidy_hosp  <- extract_cascade_estimates(results = hospitalized, outcome = "Hospitalized", mod_term = model_term)
   tidy_icu   <- extract_cascade_estimates(results = icu, outcome = "ICU", mod_term = model_term)
