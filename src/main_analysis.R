@@ -1,4 +1,4 @@
-main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", model_term = NULL) {
+main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", interaction_var = NULL, model_term = NULL) {
   
   if (is.null(model_term)) {
     model_term <- paste0("factor\\(", exposure_var, "\\)")
@@ -7,25 +7,29 @@ main_analysis <- function(dataset, exposure_var = "AnyCancerPhe", model_term = N
   severe_covid <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
-    outcome    = "`Severe COVID`"
+    outcome    = "`Severe COVID`",
+    int        = interaction_var
   )
   
   hospitalized <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
-    outcome    = "Hospitalized"
+    outcome    = "Hospitalized",
+    int        = interaction_var
   )
   
   icu          <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
-    outcome    = "ICU"
+    outcome    = "ICU",
+    int        = interaction_var
   )
   
   death        <- cascade_analysis(
     data       = dataset,
     exposure   = exposure_var,
-    outcome    = "Deceased"
+    outcome    = "Deceased",
+    int        = interaction_var
   )
 
   tidy_severe <- extract_cascade_estimates(results = severe_covid, outcome = "Severe COVID", mod_term = model_term)
