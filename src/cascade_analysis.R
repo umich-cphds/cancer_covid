@@ -1,11 +1,19 @@
-cascade_analysis <- function(data, exposure, outcome, env_name = .GlobalEnv, kable_digits = NULL) {
+cascade_analysis <- function(data, exposure, outcome, int = NULL, env_name = .GlobalEnv, kable_digits = NULL) {
   
   # model setup ---------
-  glm_mod_text     <- glue::glue("glm({outcome} ~ factor({exposure}), data = {data}, family = 'binomial')")
-  logistf_mod_text <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}), data = {data})")
-  adj1_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj1']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
-  adj2_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj2']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
-  adj3_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj3']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+  if (is.null(int)) {
+    glm_mod_text     <- glue::glue("glm({outcome} ~ factor({exposure}), data = {data}, family = 'binomial')")
+    logistf_mod_text <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}), data = {data})")
+    adj1_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj1']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+    adj2_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj2']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+    adj3_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + {paste(adj_sets[['adj3']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+  } else {
+    glm_mod_text     <- glue::glue("glm({outcome} ~ factor({exposure}), data = {data}, family = 'binomial')")
+    logistf_mod_text <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}), data = {data})")
+    adj1_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + factor({int}) + {exposure}:{int} + {paste(adj_sets[['adj1']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+    adj2_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + factor({int}) + {exposure}:{int} + {paste(adj_sets[['adj2']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+    adj3_mod_text    <- glue::glue("logistf::logistf({outcome} ~ factor({exposure}) + factor({int}) + {exposure}:{int} + {paste(adj_sets[['adj3']], collapse = ' + ')}, data = {data}, control = logistf.control(maxit = 1000))")
+  }
   
   # run models -----------
   glm_mod     <- eval(parse(text = glm_mod_text), envir = env_name)

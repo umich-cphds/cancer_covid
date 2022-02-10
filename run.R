@@ -45,8 +45,11 @@ results_to_workbook(results = recent_cancer_type)
 results_to_workbook(results = recent_cancer_treatment)
 
   # interaction analyses ----------
-  recent_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "recent_AnyCancerPhe")
-  recent_interaction_cancer_reference <- ""
+  recent_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "recent_AnyCancerPhe", reference_level = "0")
+  recent_interaction_cancer_reference <- interaction_analysis(dataset = "main", interaction_var = "recent_AnyCancerPhe", reference_level = "1")
+  
+  saveRDS(object = recent_interaction, file = "objects/recent_interaction.rds")  
+  saveRDS(object = recent_interaction_cancer_reference, file = "objects/recent_interaction_cancer_reference.rds")
 
 # vaccination analyses ----------
   
@@ -57,3 +60,19 @@ rmarkdown::render("objects/table1.Rmd")
   
 make_bar_plot(data_input = main)
 make_recent_bar_plot(data_input = main)
+
+  make_forest_plot(
+    no_cancer_results = tidy_table(main_interaction, cr = FALSE),
+    cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
+    outcome = "severe_covid"
+  )
+  make_forest_plot(
+    no_cancer_results = tidy_table(main_interaction, cr = FALSE),
+    cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
+    outcome = "hospitalization"
+  )
+  make_forest_plot(
+    no_cancer_results = tidy_table(main_interaction, cr = FALSE),
+    cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
+    outcome = "icu_admission"
+  )
