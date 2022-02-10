@@ -8,6 +8,7 @@ results_to_workbook <- function(results, filename = NULL) {
   wb <- createWorkbook()
   
   terms <- unique(results$clean$term)
+  terms <- terms[!grepl("\\:", terms)]
   
   for (i in seq_along(terms)) {
     addWorksheet(wb, sheetName = gsub("/", "_", terms[i]))

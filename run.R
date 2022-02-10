@@ -53,9 +53,14 @@ results_to_workbook(results = recent_cancer_treatment)
 
 # vaccination analyses ----------
 main[, vax_status := relevel(factor(vax_status), ref = "Unvaccinated/Unknown")]
-cancer_vax  <- main_analysis(dataset = "main", exposure_var = "vax_status", interaction_var = "AnyCancerPhe")
-saveRDS(object = cancer_vax, file = "objects/cancer_vax.rds")
-results_to_workbook(results = cancer_vax)
+vax_analysis                  <- vaccine_analysis(reference_level = "0")
+vax_analysis_cancer_reference <- vaccine_analysis(reference_level = "1")
+
+saveRDS(object = vax_analysis, file = "objects/vax_analysis.rds")
+saveRDS(object = vax_analysis_cancer_reference, file = "objects/vax_analysis_cancer_reference.rds")
+
+results_to_workbook(results = vax_analysis)
+results_to_workbook(results = vax_analysis_cancer_reference)
   
   
 # plots and figures -----------
