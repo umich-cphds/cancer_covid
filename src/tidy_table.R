@@ -1,7 +1,7 @@
 tidy_table <- function(resl, cr = FALSE) {
   
   table_names <- c("Age", "  [35,50)", "  [50,65)", "  [65,100)", "Female sex", "BMI", "  [25,30)", "  [30,200)",
-                   "Race/Ethnicity", "  African American/Non-Hispanic", "  Other/Non-Hispanic or Hispanic", "  Other/Unknown Ethnicity", "Alcohol consumption", "Smoking status", "  Current", "  Past", "Population density", "Disadvantage Index (qrtl)", "Affluence Index (qrtl)", "% Hispanic or foreign-born (qrtl)", "% less than high school diploma (qrtl)", "Comorbidity score", "  Respiratory diseases", "  Circulatory diseases", "  Type 2 diabetes", "  Kidney diseases", "  Liver diseases", "  Autoimmune diseases")
+                   "Race/Ethnicity", "  African American/Non-Hispanic", "  Other/Unknown", "Alcohol consumption", "Smoking status", "  Current", "  Past", "Population density", "Disadvantage Index (qrtl)", "Affluence Index (qrtl)", "% Hispanic or foreign-born (qrtl)", "% less than high school diploma (qrtl)", "Comorbidity score", "  Respiratory diseases", "  Circulatory diseases", "  Type 2 diabetes", "  Kidney diseases", "  Liver diseases", "  Autoimmune diseases")
   
   # severe covid
   sev_out <- dplyr::bind_rows(
@@ -11,7 +11,7 @@ tidy_table <- function(resl, cr = FALSE) {
     extract_results(res_list = resl, result = paste0("sev_int_mods"), var = "BMI", terms = c("BMI"), cancer_ref = cr),
     extract_results(res_list = resl, result = "sev_int_mods", var = "BMIcategory", terms = c("BMIcategory[25,30)", "BMIcategory[30,100)"), cancer_ref = cr),
     tibble::tibble_row(),
-    extract_results(res_list = resl, result = "sev_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Non-Hispanic or Hispanic", "RaceEthnicity4Other / Unknown Ethnicity"), cancer_ref = cr),
+    extract_results(res_list = resl, result = "sev_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Unknown"), cancer_ref = cr),
     extract_results(res_list = resl, result = "sev_int_mods", var = "Drinker", terms = c("DrinkerYes"), cancer_ref = cr),
     tibble::tibble_row(),
     extract_results(res_list = resl, result = "sev_int_mods", var = "SmokingStatus", terms = c("SmokingStatusCurrent", "SmokingStatusPast"), cancer_ref = cr),
@@ -37,7 +37,7 @@ tidy_table <- function(resl, cr = FALSE) {
     extract_results(res_list = resl, result = paste0("hos_int_mods"), var = "BMI", terms = c("BMI"), cancer_ref = cr),
     extract_results(res_list = resl, result = "hos_int_mods", var = "BMIcategory", terms = c("BMIcategory[25,30)", "BMIcategory[30,100)"), cancer_ref = cr),
     tibble::tibble_row(),
-    extract_results(res_list = resl, result = "hos_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Non-Hispanic or Hispanic", "RaceEthnicity4Other / Unknown Ethnicity"), cancer_ref = cr),
+    extract_results(res_list = resl, result = "hos_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Unknown"), cancer_ref = cr),
     extract_results(res_list = resl, result = "hos_int_mods", var = "Drinker", terms = c("DrinkerYes"), cancer_ref = cr),
     tibble::tibble_row(),
     extract_results(res_list = resl, result = "hos_int_mods", var = "SmokingStatus", terms = c("SmokingStatusCurrent", "SmokingStatusPast"), cancer_ref = cr),
@@ -63,7 +63,7 @@ tidy_table <- function(resl, cr = FALSE) {
     extract_results(res_list = resl, result = paste0("icu_int_mods"), var = "BMI", terms = c("BMI"), cancer_ref = cr),
     extract_results(res_list = resl, result = "icu_int_mods", var = "BMIcategory", terms = c("BMIcategory[25,30)", "BMIcategory[30,100)"), cancer_ref = cr),
     tibble::tibble_row(),
-    extract_results(res_list = resl, result = "icu_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Non-Hispanic or Hispanic", "RaceEthnicity4Other / Unknown Ethnicity"), cancer_ref = cr),
+    extract_results(res_list = resl, result = "icu_int_mods", var = "RaceEthnicity4", terms = c("RaceEthnicity4African American / Non-Hispanic", "RaceEthnicity4Other / Unknown"), cancer_ref = cr),
     extract_results(res_list = resl, result = "icu_int_mods", var = "Drinker", terms = c("DrinkerYes"), cancer_ref = cr),
     tibble::tibble_row(),
     extract_results(res_list = resl, result = "icu_int_mods", var = "SmokingStatus", terms = c("SmokingStatusCurrent", "SmokingStatusPast"), cancer_ref = cr),
