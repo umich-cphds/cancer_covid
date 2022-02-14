@@ -90,3 +90,8 @@ make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID")
 make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization")
 make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission")
 make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality")
+
+# supplement ---------
+
+  # get counts by cancer phecodes used to generate AnyCancerPhe
+  source("lists/cancer_counts.R")
