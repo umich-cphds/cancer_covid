@@ -235,6 +235,15 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   # factorize variables and set reference groups -------------
   combined[, cancer_treatment := relevel(factor(cancer_treatment), ref = "No cancer")]
   combined[, cancer_type := relevel(factor(cancer_type), ref = "No cancer")]
+  combined[, vax_status := relevel(factor(vax_status), ref = "Unvaccinated/Unknown")]
+  
+  # combine categories and update vax definition
+  combined[RaceEthnicity4 %in% c("Other / Non-Hispanic or Hispanic", "Other / Unknown Ethnicity"), RaceEthnicity4 := "Other/Unknown"][, RaceEthnicity4 := relevel(factor(RaceEthnicity4), ref = "Caucasian / Non-Hispanic")]
+  combined[vax_status == "Unvaccinated/Unknown", vax_status = "Prior to vaccination"]
+  combined[vax_status == "Partially vaccinated", vax_status = "After one dose"]
+  combined[vax_status == "Fully vaccinated", vax_status = "After two doses"]
+  combined[vax_status == "Boosted", vax_status = "After booster"]
+  combined[, vax_status := relevel(factor(vax_status), "Prior to vaccination")]
   
   # add recent cancer variables -----------
   cli::cli_alert_info("constructing recent cancer variables...")
@@ -250,7 +259,7 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
     cli::cli_alert_info("saving whole_data object")
     saveRDS(object = combined, file = "objects/whole_data.rds")
     cli::cli_alert_info("saving main_data object (tested positive only)")
-    saveRDS(object = combined[`Test Results` == 1], file = "objects/whole_data.rds")
+    saveRDS(object = combined[`Test Results` == 1], file = "objects/main_data.rds")
   }
   
   return(combined)

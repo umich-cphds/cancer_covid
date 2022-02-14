@@ -52,7 +52,6 @@ results_to_workbook(results = recent_cancer_treatment)
   saveRDS(object = recent_interaction_cancer_reference, file = "objects/recent_interaction_cancer_reference.rds")
 
 # vaccination analyses ----------
-main[, vax_status := relevel(factor(vax_status), ref = "Unvaccinated/Unknown")]
 vax_analysis                  <- vaccine_analysis(reference_level = "0")
 vax_analysis_cancer_reference <- vaccine_analysis(reference_level = "1")
 
@@ -86,3 +85,8 @@ make_recent_bar_plot(data_input = main)
     cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
     outcome = "icu_admission"
   )
+  
+make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID")
+make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization")
+make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission")
+make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality")
