@@ -52,7 +52,7 @@ results_to_workbook(results = recent_cancer_treatment)
   saveRDS(object = recent_interaction_cancer_reference, file = "objects/recent_interaction_cancer_reference.rds")
 
 # vaccination analyses ----------
-vax_analysis                  <- vaccine_analysis(reference_level = "0")
+vax_analysis                  <- vaccine_analysis(reference_level = "0", model_term = "factor(AnyCancerPhe)")
 vax_analysis_cancer_reference <- vaccine_analysis(reference_level = "1")
 
 saveRDS(object = vax_analysis, file = "objects/vax_analysis.rds")

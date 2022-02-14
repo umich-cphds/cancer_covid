@@ -16,7 +16,8 @@ interaction_analysis <- function(dataset,
   
   for (i in seq_along(exposures)) {
     
-    tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[c(adj_sets[["adj3"]], interaction_var) %notin% exposures[i]]
+    tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[!grepl(exposures[i], c(adj_sets[["adj3"]], interaction_var))]
+    # tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[c(adj_sets[["adj3"]], interaction_var) %notin% exposures[i]]
     
     cli::cli_alert("fitting {exposures[i]} exposure model")
     
@@ -61,7 +62,7 @@ interaction_analysis <- function(dataset,
     
     cli::cli_alert("fitting {comorbidities[i]} exposure model")
     
-    tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[c(adj_sets[["adj3"]], interaction_var) %notin% comorbidities[i]]
+    tmp_covariates <- c(adj_sets[["adj3"]], interaction_var)[!grepl(comorbidities[i], c(adj_sets[["adj3"]], interaction_var))]
     
     sev_comorbid_mods[[comorbidities[i]]] <- interaction_model(
       dataset    = dataset,

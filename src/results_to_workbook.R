@@ -9,6 +9,8 @@ results_to_workbook <- function(results, filename = NULL) {
   
   terms <- unique(results$clean$term)
   terms <- terms[!grepl("\\:", terms)]
+  terms <- gsub("factor\\(", "", gsub("\\)", "", terms))
+  terms <- sapply(terms, \(x) {fifelse(nchar(x) > 31, stringr::str_trunc(x, 31), x)})
   
   for (i in seq_along(terms)) {
     addWorksheet(wb, sheetName = gsub("/", "_", terms[i]))

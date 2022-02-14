@@ -46,7 +46,7 @@ make_forest_plot <- function(no_cancer_results, cancer_results, outcome) {
                                  xmin = as.numeric(lower),
                                  xmax = as.numeric(higher))) +
     geom_hline(aes(yintercept = term, color = color), size = 7) + 
-    geom_hline(aes(yintercept = 28.5, colour = 'black'), size = 0.5) + 
+    geom_hline(aes(yintercept = 27.5, colour = 'black'), size = 0.5) + 
     geom_vline(xintercept = 1, linetype = 3) +
     geom_pointrange(aes(fill = type, shape = type), position = ggstance::position_dodgev(height=1)) +
     xlab("OR (95% CI)") +
@@ -73,7 +73,7 @@ make_forest_plot <- function(no_cancer_results, cancer_results, outcome) {
     scale_colour_identity() +
     theme_void() + 
     theme(plot.margin = margin(5, 0, 35, 0))+
-    geom_hline(aes(yintercept = 28.5, colour = 'black'), size = 0.5) 
+    geom_hline(aes(yintercept = 27.5, colour = 'black'), size = 0.5) 
   
   pvalues_table <- ggplot(data = tab, aes(y = term)) +
     geom_hline(aes(yintercept = term, colour = color), size = 7) +
@@ -84,7 +84,7 @@ make_forest_plot <- function(no_cancer_results, cancer_results, outcome) {
     xlim(-0.1,0.55)+
     theme_void() + 
     theme(plot.margin = margin(5, 0, 35, 0))+
-    geom_hline(aes(yintercept = 28.5, colour = 'black'), size = 0.5)
+    geom_hline(aes(yintercept = 27.5, colour = 'black'), size = 0.5)
   
   pdf(file = paste0("objects/", outcome,"_forest_plot.pdf"), width = 12,  height = 8)
   print(cowplot::plot_grid(ors_table, tmp_forest, pvalues_table, align = "h",

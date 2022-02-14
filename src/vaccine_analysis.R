@@ -1,4 +1,4 @@
-vaccine_analysis <- function(reference_level = "0") {
+vaccine_analysis <- function(reference_level = "0", model_term = "factor(AnyCancerPhe)") {
   
   cli::cli_alert_info("severe covid analysis...")
   severe_covid <- vaccine_cascade(outcome = "`Severe COVID`", ref_level = reference_level)
