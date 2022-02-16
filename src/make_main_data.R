@@ -249,6 +249,10 @@ make_main_data <- function(force = FALSE, save = TRUE, quick_skip = FALSE) {
   cli::cli_alert_info("constructing recent cancer variables...")
   restricted <- make_restricted_phenome_data(input = combined)
   
+  # create indicator variable for COVID-19 cases diagnosed in 2020 ------------
+  i2020_ids <- get_2020indicator_ids(x = combined)
+  combined[, i2020 := fifelse(id %in% i2020_ids, 1, 0)]
+  
   combined <- merge.data.table(
     combined,
     restricted,
