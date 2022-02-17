@@ -1,4 +1,4 @@
-make_forest_plot <- function(no_cancer_results, cancer_results, outcome) {
+make_forest_plot <- function(no_cancer_results, cancer_results, outcome, other = "") {
   
   tab <- merge.data.table(
     as.data.table(cancer_results[[outcome]])[, .(term, cancer_print, cancer_p_value)],
@@ -86,7 +86,7 @@ make_forest_plot <- function(no_cancer_results, cancer_results, outcome) {
     theme(plot.margin = margin(5, 0, 35, 0))+
     geom_hline(aes(yintercept = 27.5, colour = 'black'), size = 0.5)
   
-  pdf(file = paste0("objects/", outcome,"_forest_plot.pdf"), width = 12,  height = 8)
+  pdf(file = paste0("objects/", outcome, other, "_forest_plot.pdf"), width = 12,  height = 8)
   print(cowplot::plot_grid(ors_table, tmp_forest, pvalues_table, align = "h",
                            ncol = 3, rel_widths = c(4/8, 2.4/8,1.6/8)))
   dev.off()

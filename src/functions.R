@@ -91,10 +91,10 @@ get_last_dsb <- function(cpt_dat, icd_dat, c19_dsb, treatment) {
 # get ids for individuals diagnosed with COVID-19 in 2020 -----------
 get_2020indicator_ids <- function(x) {
   
-  q1_ids <- x[Outcome2_2021.1 %in% c("Mild", "Severe"), id]
-  q2_ids <- x[Outcome2_2021.2 %in% c("Mild", "Severe"), id]
-  q3_ids <- x[Outcome2_2021.3 %in% c("Mild", "Severe"), id]
-  q4_ids <- x[Outcome2_2021.4 %in% c("Mild", "Severe"), id]
+  q1_ids <- x[Outcome2_2020.1 %in% c("Mild", "Severe"), id]
+  q2_ids <- x[Outcome2_2020.2 %in% c("Mild", "Severe"), id]
+  q3_ids <- x[Outcome2_2020.3 %in% c("Mild", "Severe"), id]
+  q4_ids <- x[Outcome2_2020.4 %in% c("Mild", "Severe"), id]
   
   unique(c(q1_ids, q2_ids, q3_ids, q4_ids))
   

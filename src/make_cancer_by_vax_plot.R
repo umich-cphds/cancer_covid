@@ -25,11 +25,20 @@ make_cancer_by_vax_plot <- function(outcome, title, cancer_var = "AnyCancerPhe",
   plot_data[vax_reference == "After two doses", order := 3]
   plot_data[vax_reference == "After booster", order := 4]
   
+  n_data <- data.table(
+    vax_reference = c("Prior to vaccination", "After one dose", "After two doses", "After booster"),
+    order = c(1:4),
+    n = c(main[vax_status == "Prior to vaccination", .N], main[vax_status == "After one dose", .N], main[vax_status == "After two doses", .N], main[vax_status == "After booster", .N])
+  )[, text := paste0("n = ", format(n, big.mark = ","))][]
+  
   tmp_plot <- plot_data %>%
     ggplot(aes(x = reorder(vax_reference, order), y = or)) +
     geom_hline(yintercept = 1, linetype = 2, color = "gray40") +
     geom_pointrange(aes(ymin = lower, ymax = upper)) +
     ylim(0, max(plot_data[, max(upper)] + 0.4, (1.02142857*plot_data[, max(upper)]))) +
+    
+    annotate(geom = "label", x = n_data[, vax_reference], y = 0,
+             label = n_data[, text], hjust = 0.5, vjust = 0.5, size = 3) +
     
     annotate(geom = "text", x = plot_data[, vax_reference], y = plot_data[, upper] + (0.02142857*plot_data[, max(upper)]),
              label = paste0(sprintf("%.2f", round(plot_data[, or], 2)),

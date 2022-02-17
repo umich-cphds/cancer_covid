@@ -6,11 +6,11 @@ quick_vax_extract <- function(x) {
   out <- deparse(substitute(x))
   
   taco <- x$adjustment3 %>%
-    filter(term %in% tmp) %>%
     mutate(model = out) %>%
     select(model, everything())
   
   tmp_taco <- taco %>%
+    filter(term %in% tmp) %>%
     mutate(term = gsub("factor\\(vax_status\\)", "", term)) %>%
     select(term, tmp = OR_print)
   names(tmp_taco)[names(tmp_taco) == "tmp"] <- out
