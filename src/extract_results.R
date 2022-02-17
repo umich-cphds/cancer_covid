@@ -1,13 +1,21 @@
-extract_results  <- function(res_list, result, var, terms, cancer_ref = FALSE) {
+extract_results  <- function(res_list, result, var, terms, recent = FALSE, cancer_ref = FALSE) {
   
   tmp_terms     <- terms
   if (cancer_ref == FALSE) {
     tmp_names <- c("term", "no_cancer_est", "no_cancer_low", "no_cancer_high", "no_cancer_print", "no_cancer_p_value", "p_int_value")
-    tmp_int_terms <- paste0(tmp_terms, ":AnyCancerPhe1")
+    if (recent == FALSE) {
+      tmp_int_terms <- paste0(tmp_terms, ":AnyCancerPhe1")
+    } else {
+      tmp_int_terms <- paste0(tmp_terms, ":recent_AnyCancerPhe1")
+    }
   }
   if (cancer_ref == TRUE) {
     tmp_names <- c("term", "cancer_est", "cancer_low", "cancer_high", "cancer_print", "cancer_p_value", "p_int_value")
-    tmp_int_terms <- paste0(tmp_terms, ":AnyCancerPhe0")
+    if (recent == FALSE) {
+      tmp_int_terms <- paste0(tmp_terms, ":AnyCancerPhe0")
+    } else {
+      tmp_int_terms <- paste0(tmp_terms, ":recent_AnyCancerPhe0")
+    }
   }
   
   tmp <- res_list[[result]][[var]]$tidy_output %>%
