@@ -86,6 +86,25 @@ make_recent_bar_plot(data_input = main)
     outcome = "icu_admission"
   )
   
+  make_forest_plot(
+    no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE),
+    cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE),
+    outcome = "severe_covid",
+    other = "_recent"
+  )
+  make_forest_plot(
+    no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE),
+    cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE),
+    outcome = "hospitalization",
+    other = "_recent"
+  )
+  make_forest_plot(
+    no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE),
+    cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE),
+    outcome = "icu_admission",
+    other = "_recent"
+  )
+  
 make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID")
 make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization")
 make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission")
