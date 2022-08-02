@@ -6,7 +6,7 @@ source("lists/adjustment_sets.R")
 cancer_types <- c("skin_cancer", "heme_malign", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
 
 # data -----------
-# whole <- make_main_data(save = FALSE)
+whole <- make_main_data()
 # whole <- make_main_data(quick_skip = TRUE)
 whole <- readRDS("objects/whole_data.rds")
 main  <- readRDS("objects/main_data.rds")
