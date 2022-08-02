@@ -1,0 +1,11 @@
+# ignore R files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# ignore objects folder
+objects/
+#objects/main_data*
+#objects/whole_data*
+#objects/*

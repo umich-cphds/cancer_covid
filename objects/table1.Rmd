@@ -1,0 +1,103 @@
+---
+title: "Table 1: February 2, 2022 cohort"
+author: "Max Salvatore"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+---
+
+```{r setup, include = FALSE}
+ally::libri(knitr, data.table, tidyverse, table1)
+library(knitr)
+opts_chunk$set(echo = FALSE, cache = FALSE, autodep = TRUE, 
+               message = FALSE, warning = FALSE, cache.lazy = FALSE)
+
+```
+
+```{r helper_functions}
+helper.function <- function(x) {
+  ifelse(x == 1, "Yes", "No")
+}
+
+helper.function2 <- function(x) {
+  factor(x, levels = c("Yes", "No"))
+}
+```
+
+```{r load_data}
+if (getwd() != "/net/wonderland/home/mmsalva/projects/covid/new_cancer") {
+  setwd("/net/wonderland/home/mmsalva/projects/covid/new_cancer")
+}
+covar <- readRDS("objects/whole_data.rds")
+```
+
+
+```{r recode_comorbs}
+# recode comorbidities ----------
+comorbs <- c("recent_AnyCancerPhe", "AnyCancerPhe", "AnyCancer", "RespiratoryDiseases", "CirculatoryDiseases", "Type2Diabetes", "KidneyDiseases", "LiverDiseases", "AutoimmuneDiseases")
+
+covar <- covar %>% 
+  mutate_at(comorbs, helper.function) %>% 
+  mutate_at(comorbs, helper.function2) %>%
+  droplevels() %>%
+  mutate(
+    popden13_17_qrtl          = factor(popden13_17_qrtl), 
+    disadvantage2_13_17_qrtl  = factor(disadvantage2_13_17_qrtl),
+    affluence13_17_qrtl       = factor(affluence13_17_qrtl),
+    ethnicimmigrant13_17_qrtl = factor(ethnicimmigrant13_17_qrtl),
+    ped1_13_17_qrtl           = factor(ped1_13_17_qrtl),
+    vax_status                = factor(vax_status),
+    Age                       = Age * 10
+  )
+```
+
+```{r data_subsets}
+# create data subsets ----------
+tested             <- covar %>% dplyr::filter(`Cohort Type` == "Tested" & in_phenome == 1)
+positive           <- tested %>% dplyr::filter(`Test Results` == 1)
+```
+
+```{r descriptive_table}
+# prepare descriptive table ----------
+tested$`Test Results` <- factor(tested$`Test Results`,
+                                labels = c("Negative", "Positive"))
+
+tested <- droplevels(tested)
+
+labels <- list(
+  variables =
+    list(
+      Age                      = "Age",
+      AgeCategory              = "Age category",
+      Sex                      = "Sex",
+      `PrimaryCareMM_YN`       = "Primary care in MM", 
+      BMI                      = "BMI",
+      BMIcategory              = "BMI category",
+      SmokingStatus            = "Smoking status",
+      Drinker                  = "Alcohol consumption",
+      RaceEthnicity4           = "Race/ethnicity",
+      popden13_17_qrtl         = "Population density (qrtl)",
+      disadvantage2_13_17_qrtl = "Disadvantage Index (qrtl)",
+      affluence13_17_qrtl      = "Affluence Index (qrtl)",
+      ethnicimmigrant13_17_qrtl = "% Hispanic or foreign-born (qrtl)",
+      ped1_13_17_qrtl          = "% less than high school diploma (qrtl)",
+      ComorbidityScore         = "Comorbidity score",
+      AnyCancerPhe             = "Any cancer",
+      recent_AnyCancerPhe      = "Recent cancer",
+      vax_status               = "Vaccination status",
+      AnyCancer                = "Any cancer (Lars variable)"
+      ),
+  groups = list("Tested", "Positive")
+  )
+
+strata <- c(
+  list(Overall = tested),
+  split(tested, tested$`Test Results`), 
+  list(
+    "Severe COVID" = subset(tested, tested$`Test Results` == "Positive" & `Severe COVID` == 1),
+    "Hospitalized" = subset(tested, tested$`Test Results` == "Positive" & Hospitalized == 1),
+    "ICU"          = subset(tested, tested$`Test Results` == "Positive" & ICU == 1),
+    "Deceased"     = subset(tested, tested$`Test Results` == "Positive" & Deceased == 1)))
+
+table1(strata, labels, groupspan = c(2, 4))
+```
