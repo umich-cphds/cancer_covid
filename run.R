@@ -1,15 +1,15 @@
 # top matter ---------
 source("libraries.R")
-for (f in list.files("src/")) {source(paste0("src/", f))}
+purrr::walk(list.files("src/"), ~source(paste0("src/", .x)))
 source("lists/adjustment_sets.R")
 
 cancer_types <- c("skin_cancer", "heme_malign", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
 
 # data -----------
-whole <- make_main_data()
+# whole <- make_main_data(save = FALSE)
 # whole <- make_main_data(quick_skip = TRUE)
-whole <- readRDS("objects/whole_data.rds")
-main  <- readRDS("objects/main_data.rds")
+whole <- readRDS("objects/whole_data_20220701.rds")
+main  <- readRDS("objects/main_data_20220701.rds")
 
 # main analyses -----------
 any_cancer            <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")

@@ -1,7 +1,7 @@
 # print tidy model output ----------
 tidy_model_output <- function(mod, kable_digits = NULL) {
   
-  out <- broomExtra::tidy_parameters(mod, df_method = "wald") %>%
+  out <- broomExtra::tidy_parameters(mod, ci_method = "wald") %>%
     dplyr::mutate(estimate = exp(estimate), conf.low = exp(conf.low), conf.high = exp(conf.high)) %>%
     dplyr::select(term, estimate, conf_low = conf.low, conf_high = conf.high, p_value = p.value) %>%
     dplyr::mutate(
