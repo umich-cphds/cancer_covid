@@ -1,4 +1,4 @@
-cancer_codes <- list(
+codes <- list(
   
   bladder_cancer_phecodes = c("189.2"),
   
