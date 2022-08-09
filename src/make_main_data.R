@@ -190,7 +190,7 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   chemo_cpt <- code_filter(x = procedures, codes = codes$chemo$chemo_cpt_codes)
   rad_cpt   <- code_filter(x = procedures, codes = codes$radiation$radiation_cpt_codes)
   surgery   <- code_filter(x = procedures, codes = c(codes$surgery$surgery_icd_codes, codes$surgery$surgery_cpt_codes))
-  imt_cpt   <- code_filter(x = procedures, codes = codes$immunotherapy$immunotherapy$cpt_codes)
+  imt_cpt   <- code_filter(x = procedures, codes = codes$immunotherapy$immunotherapy_icd_codes)
   
   # unspecified codes ----------
   unspec_chemo <- merge.data.table(
