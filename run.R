@@ -3,7 +3,7 @@ source("libraries.R")
 purrr::walk(list.files("src/"), ~source(paste0("src/", .x)))
 source("lists/adjustment_sets.R")
 
-cancer_types <- c("skin_cancer", "heme_malign", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
+cancer_types <- c("skin_cancer", "lymphoid", "myeloid", "kidney_cancer", "bladder_cancer", "colorectal_cancer", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
 
 # data -----------
 # whole <- make_main_data(save = FALSE)
@@ -15,42 +15,47 @@ main  <- readRDS("objects/main_data_20220701.rds")
 any_cancer            <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
 any_cancer_time_strat <- main_analysis(dataset = "main", exposure_var = "yscancer_category")
 
-skin_cancer_mods     <- main_analysis(dataset = "main", exposure_var = "skin_cancer_cat")
-heme_malign_mods     <- main_analysis(dataset = "main", exposure_var = "heme_malign_cat")
-breast_cancer_mods   <- main_analysis(dataset = "main[Sex == 'F']", exposure_var = "breast_cancer_cat")
-prostate_cancer_mods <- main_analysis(dataset = "main[Sex == 'M']", exposure_var = "prostate_cancer_cat")
-lung_cancer_mods     <- main_analysis(dataset = "main", exposure_var = "lung_cancer_cat")
+skin_cancer_mods       <- main_analysis(dataset = "main", exposure_var = "skin_cancer_cat")
+lymphoid_mods          <- main_analysis(dataset = "main", exposure_var = "lymphoid_cat")
+myeloid_mods           <- main_analysis(dataset = "main", exposure_var = "myeloid_cat")
+bladder_cancer_mods    <- main_analysis(dataset = "main", exposure_var = "bladder_cancer_cat")
+kidney_cancer_mods     <- main_analysis(dataset = "main", exposure_var = "kidney_cancer_cat")
+colorectal_cancer_mods <- main_analysis(dataset = "main", exposure_var = "colorectal_cancer_cat")
+# heme_malign_mods     <- main_analysis(dataset = "main", exposure_var = "heme_malign_cat")
+breast_cancer_mods     <- main_analysis(dataset = "main[Sex == 'F']", exposure_var = "breast_cancer_cat")
+prostate_cancer_mods   <- main_analysis(dataset = "main[Sex == 'M']", exposure_var = "prostate_cancer_cat")
+lung_cancer_mods       <- main_analysis(dataset = "main", exposure_var = "lung_cancer_cat")
 
 
 # cancer_type           <- main_analysis(dataset = "main", exposure_var = cancer_types)
 # cancer_type           <- main_analysis(dataset = "main", exposure_var = "cancer_type")
 cancer_treatment      <- main_analysis(dataset = "main", exposure_var = "cancer_treatment")
 chemo_strat           <- main_analysis(dataset = "main", exposure_var = "chemo_strat_treatment")
-no_heme_treatment     <- main_analysis(dataset = "main[heme_malign == 0]", exposure_var = "cancer_treatment")
-no_heme_chemo_strat   <- main_analysis(dataset = "main[heme_malign == 0]", exposure_var = "chemo_strat_treatment")
+no_heme_treatment     <- main_analysis(dataset = "main[lymphoid == 0 & myeloid == 0]", exposure_var = "cancer_treatment")
+no_heme_chemo_strat   <- main_analysis(dataset = "main[lymphoid == 0 & myeloid == 0]", exposure_var = "chemo_strat_treatment")
 
-saveRDS(object = any_cancer, file = "objects/any_cancer.rds")
-saveRDS(object = any_cancer_time_strat, file = "objects/any_cancer_time_strat.rds")
-saveRDS(object = skin_cancer_mods, file = "objects/skin_cancer_mods.rds")
-saveRDS(object = heme_malign_mods, file = "objects/heme_malign_mods.rds")
-saveRDS(object = breast_cancer_mods, file = "objects/breast_cancer_mods.rds")
-saveRDS(object = prostate_cancer_mods, file = "objects/prostate_cancer_mods.rds")
-saveRDS(object = lung_cancer_mods, file = "objects/lung_cancer_mods.rds")
+### !!! figure out how to expedite result saving !!! ###
+results_part_1 <- list(any_cancer, any_cancer_time_strat, skin_cancer_mods, lymphoid_mods, myeloid_mods, bladder_cancer_mods, kidney_cancer_mods, colorectal_cancer_mods, breast_cancer_mods, prostate_cancer_mods, lung_cancer_mods, cancer_treatment, chemo_strat, no_heme_treatment, no_heme_chemo_strat)
 
+purrr::imap(results_part_1,
+  ~saveRDS(object = results_part_1[.y], file = paste0("objects/", deparse(substitute(.x)), ".rds")))
 
-# saveRDS(object = cancer_type, file = "objects/cancer_type.rds")
-saveRDS(object = cancer_treatment, file = "objects/cancer_treatment.rds")
-saveRDS(object = chemo_strat, file = "objects/chemo_stratified.rds")
-saveRDS(object = no_heme_treatment, file = "objects/no_heme_treatment.rds")
-saveRDS(object = no_heme_chemo_strat, file = "objects/no_heme_chemo_stratified.rds")
+purrr::walk(
+  .x = list(any_cancer, any_cancer_time_strat, skin_cancer_mods, lymphoid_mods,
+            myeloid_mods, bladder_cancer_mods, kidney_cancer_mods,
+            colorectal_cancer_mods, breast_cancer_mods, prostate_cancer_mods,
+            lung_cancer_mods, cancer_treatment, chemo_strat, no_heme_treatment,
+            no_heme_chemo_strat),
+  ~fwrite(x = .x[["clean"]], file = glue::glue("objects/{deparse(substitute(.x))}.csv"))
+)
 
-results_to_workbook(results = any_cancer)
-results_to_workbook(results = any_cancer_time_strat)
-results_to_workbook(results = cancer_type)
-results_to_workbook(results = cancer_treatment)
-results_to_workbook(results = chemo_strat)
-results_to_workbook(results = no_heme_treatment)
-results_to_workbook(results = no_heme_chemo_strat)
+# results_to_workbook(results = any_cancer)
+# results_to_workbook(results = any_cancer_time_strat)
+# results_to_workbook(results = cancer_type)
+# results_to_workbook(results = cancer_treatment)
+# results_to_workbook(results = chemo_strat)
+# results_to_workbook(results = no_heme_treatment)
+# results_to_workbook(results = no_heme_chemo_strat)
 
   # interaction analyses -----------
   main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "0")

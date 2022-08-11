@@ -52,21 +52,30 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
     sub_phecode <- sub_phecode[sub_phecode[, .I[DaysSinceBirth == min(DaysSinceBirth)], by = key(sub_phecode)]$V1]
   
   # get ids -----------
-  codes <- readRDS("~/projects/covid/new_cancer/lists/cancer_codes.rds")
+    source("~/projects/covid/new_cancer/lists/cancer_codes.R")
   
   cancer <- sub_phecode[phecode %in% codes$cancer_phecodes]
   
-  skin_cancer_ids     <- get_ids(x = sub_phecode, filter_codes = codes$skin_cancer_phecodes)
-  heme_malign_ids     <- get_ids(x = sub_phecode, filter_codes = codes$heme_malign_phecodes)
-  breast_cancer_ids   <- get_ids(x = sub_phecode, filter_codes = codes$breast_cancer_phecodes)
-  prostate_cancer_ids <- get_ids(x = sub_phecode, filter_codes = codes$prostate_cancer_phecodes)
-  lung_cancer_ids     <- get_ids(x = sub_phecode, filter_codes = codes$lung_cancer_phecodes)
-  other_cancer_ids    <- get_ids(x = sub_phecode, filter_codes = codes$cancer_phecodes[!(codes$cancer_phecodes %in% c(
+  skin_cancer_ids       <- get_ids(x = sub_phecode, filter_codes = codes$skin_cancer_phecodes)
+  heme_malign_ids       <- get_ids(x = sub_phecode, filter_codes = unique(unlist(codes$heme_malign)))
+  myeloid_ids           <- get_ids(x = sub_phecode, filter_codes = codes$heme_malign$myeloid)
+  lymphoid_ids          <- get_ids(x = sub_phecode, filter_codes = codes$heme_malign$lymphoid)
+  breast_cancer_ids     <- get_ids(x = sub_phecode, filter_codes = codes$breast_cancer_phecodes)
+  bladder_cancer_ids    <- get_ids(x = sub_phecode, filter_codes = codes$bladder_cancer_phecodes)
+  kidney_cancer_ids     <- get_ids(x = sub_phecode, filter_codes = codes$kidney_cancer_phecodes)
+  prostate_cancer_ids   <- get_ids(x = sub_phecode, filter_codes = codes$prostate_cancer_phecodes)
+  colorectal_cancer_ids <- get_ids(x = sub_phecode, filter_codes = codes$colorectal_cancer_phecodes)
+  lung_cancer_ids       <- get_ids(x = sub_phecode, filter_codes = codes$lung_cancer_phecodes)
+  other_cancer_ids      <- get_ids(x = sub_phecode, filter_codes = codes$cancer_phecodes[!(codes$cancer_phecodes %in% c(
     codes$skin_cancer_phecodes,
+    codes$colorectal_cancer_phecodes,
+    codes$bladder_cancer_phecodes,
+    codes$kidney_cancer_phecodes,
     codes$heme_malign_phecodes,
     codes$breast_cancer_phecodes,
     codes$prostate_cancer_phecodes,
-    codes$lung_cancer_phecodes
+    codes$lung_cancer_phecodes,
+    unique(unlist(codes$heme_malign))
   ))])
   
   # process covariate data -----------
@@ -257,12 +266,17 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
         Age = Age/10
       )
     ][, `:=` (
-      skin_cancer     = fifelse(id %in% skin_cancer_ids, 1, 0),
-      heme_malign     = fifelse(id %in% heme_malign_ids, 1, 0),
-      breast_cancer   = fifelse(id %in% breast_cancer_ids, 1, 0),
-      prostate_cancer = fifelse(id %in% prostate_cancer_ids, 1, 0),
-      lung_cancer     = fifelse(id %in% lung_cancer_ids, 1, 0),
-      other_cancer    = fifelse(id %in% other_cancer_ids, 1, 0)
+      skin_cancer       = fifelse(id %in% skin_cancer_ids, 1, 0),
+      heme_malign       = fifelse(id %in% heme_malign_ids, 1, 0),
+      lymphoid          = fifelse(id %in% lymphoid_ids, 1, 0),
+      myeloid           = fifelse(id %in% myeloid_ids, 1, 0),
+      kidney_cancer     = fifelse(id %in% kidney_cancer_ids, 1, 0),
+      bladder_cancer    = fifelse(id %in% bladder_cancer_ids, 1, 0),
+      breast_cancer     = fifelse(id %in% breast_cancer_ids, 1, 0),
+      prostate_cancer   = fifelse(id %in% prostate_cancer_ids, 1, 0),
+      lung_cancer       = fifelse(id %in% lung_cancer_ids, 1, 0),
+      other_cancer      = fifelse(id %in% other_cancer_ids, 1, 0),
+      colorectal_cancer = fifelse(id %in% colorectal_cancer_ids, 1, 0)
     )][
       , `:=` (
         radiation   = fifelse(id %in% c(rad_cpt$id, rad_icd$id, unspec_radiation$id), 1, 0),
@@ -380,29 +394,43 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   
   rec_cancer <- cancer[DaysSinceBirth > three_years]
   
-  recent_skin_cancer_ids     <- rec_cancer[phecode %in% codes$skin_cancer_phecodes, unique(id)]
-  recent_heme_malign_ids     <- rec_cancer[phecode %in% codes$heme_malign_phecodes, unique(id)]
-  recent_breast_cancer_ids   <- rec_cancer[phecode %in% codes$breast_cancer_phecodes, unique(id)]
-  recent_prostate_cancer_ids <- rec_cancer[phecode %in% codes$prostate_cancer_phecodes, unique(id)]
-  recent_lung_cancer_ids     <- rec_cancer[phecode %in% codes$lung_cancer_phecodes, unique(id)]
-  recent_other_cancer_ids    <- rec_cancer[phecode %in% codes$cancer_phecodes[!(codes$cancer_phecodes %in% c(
+  recent_skin_cancer_ids       <- rec_cancer[phecode %in% codes$skin_cancer_phecodes, unique(id)]
+  recent_heme_malign_ids       <- rec_cancer[phecode %in% unlist(codes$heme_malign), unique(id)]
+  recent_lymphoid_ids          <- rec_cancer[phecode %in% codes$heme_malign$lymphoid, unique(id)]
+  recent_myeloid_ids           <- rec_cancer[phecode %in% codes$heme_malign$myeloid, unique(id)]
+  recent_breast_cancer_ids     <- rec_cancer[phecode %in% codes$breast_cancer_phecodes, unique(id)]
+  recent_bladder_cancer_ids    <- rec_cancer[phecode %in% codes$bladder_cancer_phecodes, unique(id)]
+  recent_kidney_cancer_ids     <- rec_cancer[phecode %in% codes$kidney_cancer_phecodes, unique(id)]
+  recent_colorectal_cancer_ids <- rec_cancer[phecode %in% codes$colorectal_cancer_phecodes, unique(id)]
+  recent_prostate_cancer_ids   <- rec_cancer[phecode %in% codes$prostate_cancer_phecodes, unique(id)]
+  recent_lung_cancer_ids       <- rec_cancer[phecode %in% codes$lung_cancer_phecodes, unique(id)]
+  recent_other_cancer_ids      <- rec_cancer[phecode %in% codes$cancer_phecodes[!(codes$cancer_phecodes %in% c(
     codes$skin_cancer_phecodes,
+    codes$colorectal_cancer_phecodes,
+    codes$bladder_cancer_phecodes,
+    codes$kidney_cancer_phecodes,
     codes$heme_malign_phecodes,
     codes$breast_cancer_phecodes,
     codes$prostate_cancer_phecodes,
-    codes$lung_cancer_phecodes
+    codes$lung_cancer_phecodes,
+    unique(unlist(codes$heme_malign))
   ))], unique(id)]
   
   ###
   
   combined[, `:=` (
-    recent_AnyCancerPhe    = fifelse(id %in% rec_cancer[, unique(id)], 1, 0),
-    recent_skin_cancer     = fifelse(id %in% recent_skin_cancer_ids, 1, 0),
-    recent_heme_malign     = fifelse(id %in% recent_heme_malign_ids, 1, 0),
-    recent_breast_cancer   = fifelse(id %in% recent_breast_cancer_ids, 1, 0),
-    recent_prostate_cancer = fifelse(id %in% recent_prostate_cancer_ids, 1, 0),
-    recent_lung_cancer     = fifelse(id %in% recent_lung_cancer_ids, 1, 0),
-    recent_other_cancer    = fifelse(id %in% recent_other_cancer_ids, 1, 0)
+    recent_AnyCancerPhe      = fifelse(id %in% rec_cancer[, unique(id)], 1, 0),
+    recent_skin_cancer       = fifelse(id %in% recent_skin_cancer_ids, 1, 0),
+    recent_lymphoid          = fifelse(id %in% recent_lymphoid_ids, 1, 0),
+    recent_myeloid           = fifelse(id %in% recent_myeloid_ids, 1, 0),
+    recent_bladder_cancer    = fifelse(id %in% recent_bladder_cancer_ids, 1, 0),
+    recent_kidney_cancer     = fifelse(id %in% recent_kidney_cancer_ids, 1, 0),
+    recent_colorectal_cancer = fifelse(id %in% recent_colorectal_cancer_ids, 1, 0),
+    recent_heme_malign       = fifelse(id %in% recent_heme_malign_ids, 1, 0),
+    recent_breast_cancer     = fifelse(id %in% recent_breast_cancer_ids, 1, 0),
+    recent_prostate_cancer   = fifelse(id %in% recent_prostate_cancer_ids, 1, 0),
+    recent_lung_cancer       = fifelse(id %in% recent_lung_cancer_ids, 1, 0),
+    recent_other_cancer      = fifelse(id %in% recent_other_cancer_ids, 1, 0)
   )]
   
   # combined[, recent_other_cancer := 0]
@@ -419,7 +447,7 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   recent_chemo_cpt <- unique(code_filter(x = rec_procedures, codes = codes$chemo$chemo_cpt_codes)[, id])
   recent_rad_cpt   <- unique(code_filter(x = rec_procedures, codes = codes$radiation$radiation_cpt_codes)[, id])
   recent_surgery   <- code_filter(x = rec_procedures, codes = c(codes$surgery$surgery_icd_codes, codes$surgery$surgery_cpt_codes))
-  recent_imt_cpt   <- unique(code_filter(x = rec_procedures, codes = codes$immunotherapy$immunotherapy$cpt_codes)[, id])
+  recent_imt_cpt   <- unique(code_filter(x = rec_procedures, codes = codes$immunotherapy$immunotherapy_icd_codes)[, id])
   
   recent_unspec_chemo <- merge.data.table(
     code_filter(x = rec_procedures, codes = codes$chemo$chemo_unspec_codes),
@@ -474,7 +502,12 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   
   # create cancer type variable ----------
   combined[recent_skin_cancer == 1, recent_cancer_type := "Melanoma"]
-  combined[recent_heme_malign == 1, recent_cancer_type := "Hematologic malignancy"]
+  # combined[recent_heme_malign == 1, recent_cancer_type := "Hematologic malignancy"]
+  combined[recent_lymphoid == 1, recent_cancer_type := "Lymphoid"]
+  combined[recent_myeloid == 1, recent_cancer_type := "Myeloid"]
+  combined[recent_bladder_cancer == 1, recent_cancer_type := "Bladder cancer"]
+  combined[recent_kidney_cancer == 1, recent_cancer_type := "Kidney cancer"]
+  combined[recent_colorectal_cancer == 1, recent_cancer_type := "Colorectal cancer"]
   combined[recent_breast_cancer == 1, recent_cancer_type := "Breast cancer"]
   combined[recent_prostate_cancer == 1, recent_cancer_type := "Prostate cancer"]
   combined[recent_lung_cancer == 1, recent_cancer_type := "Lung cancer"]
@@ -500,8 +533,20 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   combined[, recent_skin_cancer := fifelse(recent_skin_cancer == 1, "[0, 3)", fifelse(skin_cancer == 1, "[3+)", "No skin cancer"))]
   combined[, recent_skin_cancer := relevel(factor(recent_skin_cancer), ref = "No skin cancer")]
   
-  combined[, recent_heme_malign := fifelse(recent_heme_malign == 1, "[0, 3)", fifelse(heme_malign == 1, "[3+)", "No heme malign"))]
-  combined[, recent_heme_malign := relevel(factor(recent_heme_malign), ref = "No heme malign")]
+  combined[, recent_lymphoid := fifelse(recent_lymphoid == 1, "[0, 3)", fifelse(lymphoid == 1, "[3+)", "No lymphoid"))]
+  combined[, recent_lymphoid := relevel(factor(recent_lymphoid), ref = "No lymphoid")]
+  
+  combined[, recent_myeloid := fifelse(recent_myeloid == 1, "[0, 3)", fifelse(myeloid == 1, "[3+)", "No myeloid"))]
+  combined[, recent_myeloid := relevel(factor(recent_myeloid), ref = "No myeloid")]
+  
+  combined[, recent_bladder_cancer := fifelse(recent_bladder_cancer == 1, "[0, 3)", fifelse(bladder_cancer == 1, "[3+)", "No bladder cancer"))]
+  combined[, recent_bladder_cancer := relevel(factor(recent_bladder_cancer), ref = "No bladder cancer")]
+  
+  combined[, recent_kidney_cancer := fifelse(recent_kidney_cancer == 1, "[0, 3)", fifelse(kidney_cancer == 1, "[3+)", "No kidney cancer"))]
+  combined[, recent_kidney_cancer := relevel(factor(recent_kidney_cancer), ref = "No kidney cancer")]
+  
+  combined[, recent_colorectal_cancer := fifelse(recent_colorectal_cancer == 1, "[0, 3)", fifelse(colorectal_cancer == 1, "[3+)", "No colorectal cancer"))]
+  combined[, recent_colorectal_cancer := relevel(factor(recent_colorectal_cancer), ref = "No colorectal cancer")]
   
   combined[, recent_breast_cancer := fifelse(recent_breast_cancer == 1, "[0, 3)", fifelse(breast_cancer == 1, "[3+)", "No breast cancer"))]
   combined[, recent_breast_cancer := relevel(factor(recent_breast_cancer), ref = "No breast cancer")]
@@ -519,9 +564,24 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   combined[, skin_cancer_cat := fifelse(skin_cancer == 1, "Melanoma", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
   combined[, skin_cancer_cat := relevel(factor(skin_cancer_cat), ref = "No cancer")]
   
-  combined[, heme_malign_cat := fifelse(heme_malign == 1, "Hematologic malignancy", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
-  combined[, heme_malign_cat := relevel(factor(heme_malign_cat), ref = "No cancer")]
-  table(combined[, heme_malign_cat])
+  combined[, lymphoid_cat := fifelse(lymphoid == 1, "Lymphoid", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, lymphoid_cat := relevel(factor(lymphoid_cat), ref = "No cancer")]
+  
+  combined[, myeloid_cat := fifelse(myeloid == 1, "Myeloid", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, myeloid_cat := relevel(factor(myeloid_cat), ref = "No cancer")]
+  table(combined[, myeloid_cat])
+  
+  combined[, bladder_cancer_cat := fifelse(bladder_cancer == 1, "Bladder cancer", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, bladder_cancer_cat := relevel(factor(bladder_cancer_cat), ref = "No cancer")]
+  table(combined[, bladder_cancer_cat])
+  
+  combined[, kidney_cancer_cat := fifelse(kidney_cancer == 1, "Kidney cancer", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, kidney_cancer_cat := relevel(factor(kidney_cancer_cat), ref = "No cancer")]
+  table(combined[, kidney_cancer_cat])
+  
+  combined[, colorectal_cancer_cat := fifelse(colorectal_cancer == 1, "Colorectal cancer", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, colorectal_cancer_cat := relevel(factor(colorectal_cancer_cat), ref = "No cancer")]
+  table(combined[, colorectal_cancer_cat])
   
   
   combined[, breast_cancer_cat := fifelse(breast_cancer == 1, "Breast cancer", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
@@ -544,9 +604,9 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   # -----------
   if (save == TRUE) {
     cli::cli_alert_info("saving whole_data object")
-    saveRDS(object = combined, file = "objects/whole_data.rds")
+    saveRDS(object = combined, file = glue::glue("objects/whole_data_{chrt}.rds"))
     cli::cli_alert_info("saving main_data object (tested positive only)")
-    saveRDS(object = combined[`Test Results` == 1], file = "objects/main_data.rds")
+    saveRDS(object = combined[`Test Results` == 1], file = glue::glue("objects/main_data_{chrt}.rds"))
   }
   
   return(combined)
