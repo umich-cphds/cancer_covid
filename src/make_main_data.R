@@ -373,17 +373,17 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   )][!is.na(AnyCancerPhe)][]
   
   # create cancer type variable ----------
-  combined[skin_cancer == 1, cancer_type := "Melanoma"]
-  combined[heme_malign == 1, cancer_type := "Hematologic malignancy"]
-  combined[breast_cancer == 1, cancer_type := "Breast cancer"]
-  combined[prostate_cancer == 1, cancer_type := "Prostate cancer"]
-  combined[lung_cancer == 1, cancer_type := "Lung cancer"]
-  combined[is.na(cancer_type) & AnyCancerPhe == 1, cancer_type := "Other cancer"]
-  combined[is.na(cancer_type) & AnyCancerPhe == 0, cancer_type := "No cancer"]
+  # combined[skin_cancer == 1, cancer_type := "Melanoma"]
+  # combined[heme_malign == 1, cancer_type := "Hematologic malignancy"]
+  # combined[breast_cancer == 1, cancer_type := "Breast cancer"]
+  # combined[prostate_cancer == 1, cancer_type := "Prostate cancer"]
+  # combined[lung_cancer == 1, cancer_type := "Lung cancer"]
+  # combined[is.na(cancer_type) & AnyCancerPhe == 1, cancer_type := "Other cancer"]
+  # combined[is.na(cancer_type) & AnyCancerPhe == 0, cancer_type := "No cancer"]
   
   # factorize variables and set reference groups -------------
   combined[, cancer_treatment := relevel(factor(cancer_treatment), ref = "No cancer")]
-  combined[, cancer_type := relevel(factor(cancer_type), ref = "No cancer")]
+  # combined[, cancer_type := relevel(factor(cancer_type), ref = "No cancer")]
   combined[, vax_status := relevel(factor(vax_status), ref = "Before vaccination")]
   
   # combine categories and update vax definition
@@ -501,26 +501,29 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   )][!is.na(AnyCancerPhe)][]
   
   # create cancer type variable ----------
-  combined[recent_skin_cancer == 1, recent_cancer_type := "Melanoma"]
-  # combined[recent_heme_malign == 1, recent_cancer_type := "Hematologic malignancy"]
-  combined[recent_lymphoid == 1, recent_cancer_type := "Lymphoid"]
-  combined[recent_myeloid == 1, recent_cancer_type := "Myeloid"]
-  combined[recent_bladder_cancer == 1, recent_cancer_type := "Bladder cancer"]
-  combined[recent_kidney_cancer == 1, recent_cancer_type := "Kidney cancer"]
-  combined[recent_colorectal_cancer == 1, recent_cancer_type := "Colorectal cancer"]
-  combined[recent_breast_cancer == 1, recent_cancer_type := "Breast cancer"]
-  combined[recent_prostate_cancer == 1, recent_cancer_type := "Prostate cancer"]
-  combined[recent_lung_cancer == 1, recent_cancer_type := "Lung cancer"]
-  combined[is.na(recent_cancer_type) & AnyCancerPhe == 1, recent_cancer_type := "Other cancer"]
-  combined[is.na(recent_cancer_type) & AnyCancerPhe == 0, recent_cancer_type := "No cancer"]
+  # combined[recent_skin_cancer == 1, recent_cancer_type := "Melanoma"]
+  # # combined[recent_heme_malign == 1, recent_cancer_type := "Hematologic malignancy"]
+  # combined[recent_lymphoid == 1, recent_cancer_type := "Lymphoid"]
+  # combined[recent_myeloid == 1, recent_cancer_type := "Myeloid"]
+  # combined[recent_bladder_cancer == 1, recent_cancer_type := "Bladder cancer"]
+  # combined[recent_kidney_cancer == 1, recent_cancer_type := "Kidney cancer"]
+  # combined[recent_colorectal_cancer == 1, recent_cancer_type := "Colorectal cancer"]
+  # combined[recent_breast_cancer == 1, recent_cancer_type := "Breast cancer"]
+  # combined[recent_prostate_cancer == 1, recent_cancer_type := "Prostate cancer"]
+  # combined[recent_lung_cancer == 1, recent_cancer_type := "Lung cancer"]
+  # combined[is.na(recent_cancer_type) & AnyCancerPhe == 1, recent_cancer_type := "Other cancer"]
+  # combined[is.na(recent_cancer_type) & AnyCancerPhe == 0, recent_cancer_type := "No cancer"]
   
   # factorize variables and set reference groups -------------
   combined[, recent_cancer_treatment := relevel(factor(recent_cancer_treatment), ref = "No cancer")]
-  combined[, recent_cancer_type := relevel(factor(recent_cancer_type), ref = "No cancer")]
+  # combined[, recent_cancer_type := relevel(factor(recent_cancer_type), ref = "No cancer")]
   
   # create indicator variable for COVID-19 cases diagnosed in 2020 ------------
   i2020_ids <- get_2020indicator_ids(x = combined)
-  combined[, i2020 := fifelse(id %in% i2020_ids, 1, 0)]
+  i2021_ids <- get_2021indicator_ids(x = combined)
+  combined[, i2020 := fifelse(id %in% i2020_ids, "2020", fifelse(id %in% i2021_ids, "2021", "2022"))]
+  combined[, i2020 := relevel(factor(i2020), ref = "2022")]
+  # combined[, i2020 := fifelse(id %in% i2020_ids, 1, 0)]
   
   # remove observation with Age = 0 ----------
   combined <- combined[Age != 0]

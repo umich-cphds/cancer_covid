@@ -100,6 +100,17 @@ get_2020indicator_ids <- function(x) {
   
 }
 
+get_2021indicator_ids <- function(x) {
+  
+  q1_ids <- x[Outcome2_2021.1 %in% c("Mild", "Severe"), id]
+  q2_ids <- x[Outcome2_2021.2 %in% c("Mild", "Severe"), id]
+  q3_ids <- x[Outcome2_2021.3 %in% c("Mild", "Severe"), id]
+  q4_ids <- x[Outcome2_2021.4 %in% c("Mild", "Severe"), id]
+  
+  unique(c(q1_ids, q2_ids, q3_ids, q4_ids))
+  
+}
+
 ###########
 ### OLD ###
 ###########

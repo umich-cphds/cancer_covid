@@ -36,7 +36,7 @@ codes <- list(
   colorectal_cancer_phecodes = c("153", "153.2", "153.3"),
   
   heme_malign = list(
-    myeloid = c("200", "2001.", "204.2", "204.21", "204.22", "204.3"),
+    myeloid = c("200", "200.1", "204.2", "204.21", "204.22", "204.3"),
     lymphoid = c("201", "202", "202.2", "202.21", "202.22", "202.23", "202.24",
                  "204.1", "204.11", "204.12", "204.4")
     ),
@@ -44,7 +44,7 @@ codes <- list(
   immunotherapy = list(
     immunotherapy_icd_codes = c("99.28", "00.15", "V58.12", "Z51.12")),
   
-  kidney_cancer_phecodes = c("189.1"),
+  kidney_cancer_phecodes = c("189.1", "189.11", "189.12"),
   
   lung_cancer_phecodes = c("165", "165.1"),
   
