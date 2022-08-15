@@ -3,11 +3,11 @@
 library(data.table)
 
 ### file paths
-labs_path <- "/net/junglebook/michiganmedicine/data/Data_Pulls_from_Data_Office/HPI_5883/20220701/LabResults_2022-07-02.txt"
+# labs_path <- "/net/junglebook/michiganmedicine/data/Data_Pulls_from_Data_Office/HPI_5883/20220701/LabResults_2022-07-02.txt"
 meds_path <- "/net/junglebook/michiganmedicine/data/Data_Pulls_from_Data_Office/HPI_5883/20220701/MedAdministrations_2022-07-02.txt"
 
 ### load data
-labs <- fread(labs_path)
+# labs <- fread(labs_path)
 meds <- fread(meds_path)
 
 ### functions

@@ -207,3 +207,5 @@ make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality")
 
   # get counts by cancer phecodes used to generate AnyCancerPhe
   source("lists/cancer_counts.R")
+
+  # run `r/get_comorbidity_count.R` to generate numbers for Table S3

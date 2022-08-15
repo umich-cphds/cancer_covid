@@ -4,8 +4,8 @@ library(ggtext)
 library(RColorBrewer)
 library(glue)
 
-d  <- read_rds("objects/vax_analysis.rds")
-dc <- read_rds("objects/vax_analysis_cancer_reference.rds")
+d  <- read_rds("../cancer_covid_revision/objects/vax_analysis.rds")
+dc <- read_rds("../cancer_covid_revision/objects/vax_analysis_cancer_reference.rds")
 
 d$severe_covid$full %>%
   filter(term %in% paste0("factor(vax_status)", c(
@@ -143,4 +143,4 @@ plt_dat %>%
     plot.caption     = ggtext::element_markdown(hjust = 0),
     panel.spacing.x  = unit(1, "lines"))
 
-ggsave(filename = glue("objects/vax_int_plot.pdf"), width = 8, height = 5.5)
+ggsave(filename = glue("../cancer_covid_revision/objects/vax_int_plot.pdf"), width = 8, height = 5.5)
