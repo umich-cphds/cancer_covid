@@ -6,6 +6,7 @@
 
 # ignore objects folder
 objects/
+data/
 #objects/main_data*
 #objects/whole_data*
 #objects/*
