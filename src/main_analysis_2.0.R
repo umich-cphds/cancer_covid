@@ -3,20 +3,7 @@ main_analysis_2.0 <- function(
     exposure,
     covariates = c("Age", "Sex", "RaceEthnicity4", "disadvantage2_13_17_qrtl", "ComorbidityScore"),
     interaction = NULL,
-    model_term = NULL,
     dat) {
-  
-  if (is.null(model_term)) {
-    model_term <- rep(NA, length(exposure))
-    for (i in seq_along(exposure)) {
-      if (!grepl("factor\\(", exposure[i])) {
-        model_term[i] <- paste0("factor(", exposure[i], ")")
-      } else {
-        model_term[i] <- exposure[i]
-      }
-    }
-    # model_term <- paste0("factor\\(", exposure_var, "\\)")
-  }
   
   if (grepl("prostate", exposure) | grepl("breast", exposure)) {
     covariates <- covariates[!(tolower(covariates) == "sex")]
