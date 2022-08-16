@@ -100,8 +100,6 @@ vax_res <- list(vax_analysis = vax_analysis, vax_analysis_cancer_reference = vax
 
 purrr::walk(names(vax_res), ~saveRDS(object = vax_res[[.x]], file = paste0("objects/", .x, ".rds")))
 purrr::walk(names(vax_res), ~fwrite(x = vax_res[[.x]][["clean"]], file = paste0("objects/", .x, ".csv")))
-  
-vax_ev_sc <- logistf(`Severe COVID` ~ vax_status + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + factor(i2020), data = main, control = logistf.control(maxit = 1000))
 
 
 # vax: ever/never
@@ -137,16 +135,31 @@ purrr::walk(names(tidy_vax_ev), ~fwrite(x = tidy_vax_ev[[.x]], file = paste0("ob
 # vax_ev_2021 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2021")), control = logistf.control(maxit = 1000))
 # vax_ev_2022 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2022")), control = logistf.control(maxit = 1000))
 
-vax_year <- list(
-  vax_ev_2020 = vax_ev_2020,
-  vax_ev_2021 = vax_ev_2021,
-  vax_ev_2022 = vax_ev_2022
+# vax_year <- list(
+#   vax_ev_2020 = vax_ev_2020,
+#   vax_ev_2021 = vax_ev_2021,
+#   vax_ev_2022 = vax_ev_2022
+# )
+
+# tidy_vax_year <- purrr::map(names(vax_year), ~tidy_model_output(vax_year[[.x]]))
+# names(tidy_vax_year) <- names(vax_year)
+# 
+# purrr::walk(names(tidy_vax_year), ~fwrite(x = tidy_vax_year[[.x]], file = paste0("objects/", .x, ".csv")))
+
+heme_vax_sc <- logistf(`Severe COVID` ~ vax_ever + heme_malign_cat + vax_ever:heme_malign_cat + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(heme_malign_cat = relevel(heme_malign_cat, ref = "Hematologic malignancies")), control = logistf.control(maxit = 1000))
+no_heme_vax_sc <- logistf(`Severe COVID` ~ vax_ever + heme_malign_cat + vax_ever:heme_malign_cat + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(heme_malign_cat = relevel(heme_malign_cat, ref = "Other cancer")), control = logistf.control(maxit = 1000))
+no_cancer_vax_sc <- logistf(`Severe COVID` ~ vax_ever + heme_malign_cat + vax_ever:heme_malign_cat + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(heme_malign_cat = relevel(heme_malign_cat, ref = "No cancer")), control = logistf.control(maxit = 1000))
+
+heme_vax_mods <- list(
+  heme_vax_sc = heme_vax_sc,
+  no_heme_vax_sc = no_heme_vax_sc,
+  no_cancer_vax_sc = no_cancer_vax_sc
 )
 
-tidy_vax_year <- purrr::map(names(vax_year), ~tidy_model_output(vax_year[[.x]]))
-names(tidy_vax_year) <- names(vax_year)
+tidy_heme_vax_mods <- purrr::map(names(heme_vax_mods), ~tidy_model_output(heme_vax_mods[[.x]]))
+names(tidy_heme_vax_mods) <- names(heme_vax_mods)
 
-purrr::walk(names(tidy_vax_year), ~fwrite(x = tidy_vax_year[[.x]], file = paste0("objects/", .x, ".csv")))
+purrr::walk(names(tidy_heme_vax_mods), ~fwrite(x = tidy_heme_vax_mods[[.x]], file = paste0("objects/", .x, ".csv")))
 
 
 # plots and figures -----------

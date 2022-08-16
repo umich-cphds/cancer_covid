@@ -17,14 +17,10 @@ comorbidities <- purrr::map_dfr(names(comorbidities),
            ))
 
 # load cohort data
-whole <- readRDS("objects/whole_data_20220701.rds")
+whole <- readRDS("data/whole_data_20220701.rds")
 
 # load phecode data
-icd_phecode_tested <- load_icd_phecode_tested_data(
-  icd9_path  = file_paths$icd9,
-  icd10_path = file_paths$icd10
-)
-icd_phecode        <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
+icd_phecode <- fst::read_fst(paste0("data/processed_phecode_data_", chrt, ".fst"), as.data.table = TRUE)
 
 # subset to those in cohort and with comorbidity codes
 comorbid_phecode <- icd_phecode[id %in% whole[, id]][phecode %in% comorbidities[, phecode]]
