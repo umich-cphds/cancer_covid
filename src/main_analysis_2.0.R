@@ -13,7 +13,6 @@ main_analysis_2.0 <- function(
   if (!is.null(interaction)) {
     forms <- paste0(forms, paste0(" + factor(", interaction, ") + ", exposure, ":", interaction))
   }
-  forms
   
   mods <- purrr::map(forms,
                      ~logistf(formula = .x, data = dat, control = logistf.control(maxit = 1000)))
