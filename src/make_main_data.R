@@ -1,5 +1,5 @@
 # Loads, manipulates, and prepares clean data file for analysis
-make_main_data <- function(save = TRUE, chrt = "20220701") {
+make_main_data <- function(save = TRUE, chrt = "20220801") {
 
   file_paths <- get_file_paths(cohort = chrt)
   

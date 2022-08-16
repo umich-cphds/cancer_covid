@@ -12,8 +12,8 @@ make_processed_phecode_data <- function(cohort = "20220801", fl_pths) {
     
     # load phecode data ----------
     icd_phecode_tested <- load_icd_phecode_tested_data(
-      icd9_path  = file_paths$icd9,
-      icd10_path = file_paths$icd10
+      icd9_path  = fl_pths$icd9,
+      icd10_path = fl_pths$icd10
     )
     icd_phecode        <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
     
