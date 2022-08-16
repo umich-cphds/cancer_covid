@@ -1,0 +1,271 @@
+class,phecode,description,count
+Autoimmune,242.1,Graves' disease,2233
+Autoimmune,250.1,Type 1 diabetes,7039
+Autoimmune,335,Multiple sclerosis,2105
+Autoimmune,557.1,Celiac disease,2196
+Autoimmune,694.1,Vitiligo,846
+Autoimmune,695.4,Lupus (localized and systemic),4054
+Autoimmune,696.4,Psoriasis,6156
+Autoimmune,697,Sarcoidosis,2042
+Autoimmune,704.1,Alopecia,8771
+Autoimmune,714.1,Rheumatoid arthritis,7952
+Autoimmune,717,Polymyalgia Rheumatica,1203
+Circulatory,394,Rheumatic disease of the heart valves,5130
+Circulatory,394.1,Mitral valve stenosis and aortic valve stenosis,990
+Circulatory,394.2,Mitral valve disease,1769
+Circulatory,394.3,Aortic valve disease,408
+Circulatory,394.4,Acute rheumatic heart disease,266
+Circulatory,394.7,Disease of tricuspid valve,2126
+Circulatory,395,Heart valve disorders,15152
+Circulatory,395.1,Nonrheumatic mitral valve disorders,7931
+Circulatory,395.2,Nonrheumatic aortic valve disorders,7556
+Circulatory,395.3,Nonrheumatic tricuspid valve disorders,2216
+Circulatory,395.4,Nonrheumatic pulmonary valve disorders,675
+Circulatory,395.6,Heart valve replaced,3457
+Circulatory,396,Abnormal heart sounds,19197
+Circulatory,401,Hypertension,92248
+Circulatory,401.1,Essential hypertension,91449
+Circulatory,401.2,Hypertensive heart and/or renal disease,11631
+Circulatory,401.21,Hypertensive heart disease,3824
+Circulatory,401.22,Hypertensive chronic kidney disease,7382
+Circulatory,401.3,Other hypertensive complications,10725
+Circulatory,411,Ischemic Heart Disease,31986
+Circulatory,411.1,Unstable angina (intermediate coronary syndrome),3381
+Circulatory,411.2,Myocardial infarction,11849
+Circulatory,411.3,Angina pectoris,8599
+Circulatory,411.4,Coronary atherosclerosis,27018
+Circulatory,411.41,Aneurysm and dissection of heart,574
+Circulatory,411.8,"Other chronic ischemic heart disease, unspecified",23357
+Circulatory,411.9,Other acute and subacute forms of ischemic heart disease,1139
+Circulatory,414,Other forms of chronic heart disease,12331
+Circulatory,414.2,ASCVD,3361
+Circulatory,415,Pulmonary heart disease,11884
+Circulatory,415.1,Acute pulmonary heart disease,6033
+Circulatory,415.11,"Pulmonary embolism and infarction, acute",6012
+Circulatory,415.2,Chronic pulmonary heart disease,6909
+Circulatory,415.21,Primary pulmonary hypertension,2116
+Circulatory,416,Cardiomegaly,6085
+Circulatory,418,Nonspecific chest pain,62897
+Circulatory,418.1,Precordial pain,6263
+Circulatory,420,Carditis,5833
+Circulatory,420.1,Myocarditis,461
+Circulatory,420.2,Pericarditis,3095
+Circulatory,420.21,Acute pericarditis,657
+Circulatory,420.22,Chronic pericarditis,419
+Circulatory,420.3,Endocarditis,2677
+Circulatory,425,Cardiomyopathy,8226
+Circulatory,425.1,Primary/intrinsic cardiomyopathies,7793
+Circulatory,425.11,Hypertrophic obstructive cardiomyopathy,891
+Circulatory,425.12,Other hypertrophic cardiomyopathy,1115
+Circulatory,425.2,Secondary/extrinsic cardiomyopathies,1271
+Circulatory,425.8,Other cardiomyopathy,349
+Circulatory,426,Cardiac conduction disorders,44918
+Circulatory,426.2,Atrioventricular [AV] block,6050
+Circulatory,426.21,First degree AV block,3905
+Circulatory,426.22,Mobitz II AV block,217
+Circulatory,426.23,Second degree AV block,777
+Circulatory,426.24,"Atrioventricular block, complete",1549
+Circulatory,426.25,Other heart block,698
+Circulatory,426.3,Bundle branch block,7776
+Circulatory,426.31,Right bundle branch block,4865
+Circulatory,426.32,Left bundle branch block,3230
+Circulatory,426.4,Anomalous atrioventricular excitation,443
+Circulatory,426.7,Abnormal electrocardiogram [ECG] [EKG],38578
+Circulatory,426.8,Other cardiac conduction disorders,3219
+Circulatory,426.9,Cardiac pacemaker/device in situ,5970
+Circulatory,426.91,Cardiac pacemaker in situ,3766
+Circulatory,426.92,Cardiac defibrillator in situ,3158
+Circulatory,427,Cardiac dysrhythmias,72734
+Circulatory,427.1,"Paroxysmal tachycardia, unspecified",9597
+Circulatory,427.11,Paroxysmal supraventricular tachycardia,6208
+Circulatory,427.12,Paroxysmal ventricular tachycardia,4590
+Circulatory,427.2,Atrial fibrillation and flutter,17782
+Circulatory,427.21,Atrial fibrillation,17171
+Circulatory,427.22,Atrial flutter,6171
+Circulatory,427.3,Other specified cardiac dysrhythmias,31396
+Circulatory,427.4,Cardiac arrest and ventricular fibrillation,1686
+Circulatory,427.41,Ventricular fibrillation and flutter,848
+Circulatory,427.42,Cardiac arrest,1175
+Circulatory,427.5,Arrhythmia (cardiac) NOS,26867
+Circulatory,427.6,Premature beats,8889
+Circulatory,427.61,Supraventricular premature beats,2438
+Circulatory,427.7,Tachycardia NOS,20420
+Circulatory,427.8,Sinoatrial node dysfunction (Bradycardia),3109
+Circulatory,427.9,Palpitations,24009
+Circulatory,428,Congestive heart failure; nonhypertensive,16702
+Circulatory,428.1,Congestive heart failure (CHF) NOS,13904
+Circulatory,428.2,Heart failure NOS,14921
+Circulatory,428.3,Heart failure with reduced EF [Systolic or combined heart failure],6578
+Circulatory,428.4,Heart failure with preserved EF [Diastolic heart failure],6262
+Circulatory,429,Ill-defined descriptions and complications of heart disease,57136
+Circulatory,429.1,Heart transplant/surgery,4025
+Circulatory,429.2,Abnormal function study of cardiovascular system,26448
+Circulatory,429.3,Symptoms involving cardiovascular system,44938
+Circulatory,429.9,"Cardiac complications, not elsewhere classified",1688
+Circulatory,430,Intracranial hemorrhage,2482
+Circulatory,430.1,Subarachnoid hemorrhage,944
+Circulatory,430.2,Intracerebral hemorrhage,1101
+Circulatory,430.3,Subdural hemorrhage,859
+Circulatory,433,Cerebrovascular disease,20685
+Circulatory,433.1,Occlusion and stenosis of precerebral arteries,6572
+Circulatory,433.11,"Occlusion of cerebral arteries, with cerebral infarction",1009
+Circulatory,433.12,Cerebral atherosclerosis,323
+Circulatory,433.2,Occlusion of cerebral arteries,10347
+Circulatory,433.21,"Cerebral artery occlusion, with cerebral infarction",9965
+Circulatory,433.3,Cerebral ischemia,9934
+Circulatory,433.31,Transient cerebral ischemia,8957
+Circulatory,433.32,Moyamoya disease,59
+Circulatory,433.5,Cerebral aneurysm,1820
+Circulatory,433.6,"Acute, but ill-defined cerebrovascular disease",1652
+Circulatory,433.8,Late effects of cerebrovascular disease,2999
+Circulatory,440,Atherosclerosis,7028
+Circulatory,440.1,Atherosclerosis of renal artery,733
+Circulatory,440.2,Atherosclerosis of the extremities,3971
+Circulatory,440.21,Atherosclerosis of native arteries of the extremities with ulceration or gangrene,561
+Circulatory,440.22,Atherosclerosis of native arteries of the extremities with intermittent claudication,2767
+Circulatory,440.9,Atherosclerosis of aorta,2267
+Circulatory,441,Vascular insufficiency of intestine,1568
+Circulatory,441.1,Acute vascular insufficiency of intestine,648
+Circulatory,441.2,Chronic vascular insufficiency of intestine,525
+Circulatory,442,Other aneurysm,9176
+Circulatory,442.1,Aortic aneurysm,6965
+Circulatory,442.11,Abdominal aortic aneurysm,3475
+Circulatory,442.2,Aneurysm of iliac artery,493
+Circulatory,442.3,Aneurysm of artery of lower extremity,402
+Circulatory,442.4,Arterial dissection,749
+Circulatory,442.8,Aneurysm of other specified artery,1116
+Circulatory,443,Peripheral vascular disease,11624
+Circulatory,443.1,Raynaud's syndrome,3995
+Circulatory,443.7,Peripheral angiopathy in diseases classified elsewhere,622
+Circulatory,443.8,Other specified peripheral vascular diseases,10061
+Circulatory,443.9,"Peripheral vascular disease, unspecified",7552
+Circulatory,444,Arterial embolism and thrombosis,2434
+Circulatory,444.1,Arterial embolism and thrombosis of lower extremity artery,832
+Circulatory,444.2,Embolism and thrombosis of abdominal aorta,374
+Circulatory,444.5,Atheroembolism,99
+Circulatory,446,Polyarteritis nodosa and allied conditions,2145
+Circulatory,446.1,Thromboangiitis obliterans,61
+Circulatory,446.2,Acute febrile mucocutaneous lymph node syndrome (Kawasaki disease),90
+Circulatory,446.3,Hypersensitivity angiitis,264
+Circulatory,446.4,Wegener's granulomatosis,368
+Circulatory,446.5,Giant cell arteritis,410
+Circulatory,446.6,Polyarteritis nodosa,164
+Circulatory,446.7,Takayasu's disease,62
+Circulatory,446.8,Thrombotic microangiopathy,123
+Circulatory,446.9,Arteritis NOS,1219
+Circulatory,447,Other disorders of arteries and arterioles,9205
+Circulatory,447.1,Stricture of artery,1467
+Circulatory,447.7,Aortic ectasia,3136
+Circulatory,448,Disease of capillaries,4542
+Circulatory,450,Noninfectious disorders of lymphatic channels,4675
+Circulatory,451,Phlebitis and thrombophlebitis,2482
+Circulatory,451.2,Phlebitis and thrombophlebitis of lower extremities,817
+Circulatory,452,Other venous embolism and thrombosis,15162
+Circulatory,452.1,Iatrogenic pulmonary embolism and infarction,823
+Circulatory,452.2,Deep vein thrombosis [DVT],9416
+Circulatory,452.8,Postphlebitic syndrome,417
+Circulatory,453,Chronic venous hypertension,761
+Circulatory,454,Varicose veins,11188
+Circulatory,454.1,Varicose veins of lower extremity,9416
+Circulatory,454.11,"Varicose veins of lower extremity, symptomtic",5880
+Circulatory,455,Hemorrhoids,27681
+Circulatory,456,Chronic venous insufficiency [CVI],12308
+Circulatory,457,"Encounter for long-term (current) use of anticoagulants, antithrombotics, aspirin",3304
+Circulatory,457.2,Encounter for long-term (current) use of antiplatelets/antithrombotics,691
+Circulatory,457.3,Encounter for long-term (current) use of aspirin,2950
+Circulatory,458,Hypotension,15788
+Circulatory,458.1,Orthostatic hypotension,5462
+Circulatory,458.2,Iatrogenic hypotension,2667
+Circulatory,458.9,Hypotension NOS,14470
+Circulatory,459,Other disorders of circulatory system,25876
+Circulatory,459.1,Hemorrhage NOS,2649
+Circulatory,459.7,Blood vessel replaced,3335
+Circulatory,459.9,Circulatory disease NEC,22642
+Diabetes,250.2,Type 2 diabetes,39052
+Kidney,585,Renal failure,28295
+Liver,571,Chronic liver disease and cirrhosis,17519
+Respiratory,464,Acute sinusitis,26954
+Respiratory,465,Acute upper respiratory infections of multiple or unspecified sites,67226
+Respiratory,465.2,Acute pharyngitis,40767
+Respiratory,465.4,Acute laryngitis and tracheitis,2138
+Respiratory,470,Septal Deviations/Turbinate Hypertrophy,6285
+Respiratory,471,Nasal polyps,1926
+Respiratory,472,Chronic pharyngitis and nasopharyngitis,10043
+Respiratory,473,Diseases of the larynx and vocal cords,11549
+Respiratory,473.1,Chronic laryngitis,261
+Respiratory,473.3,Paralysis/spasm of vocal cords or larynx,1997
+Respiratory,473.4,Voice disturbance,8346
+Respiratory,474,Acute and chronic tonsillitis,6747
+Respiratory,474.1,Acute tonsillitis,2460
+Respiratory,474.2,Chronic tonsillitis and adenoiditis,4929
+Respiratory,475,Chronic sinusitis,21664
+Respiratory,475.9,Postnasal drip,6047
+Respiratory,476,Allergic rhinitis,58511
+Respiratory,477,Epistaxis or throat hemorrhage,5795
+Respiratory,478,Throat pain,2643
+Respiratory,479,Other upper respiratory disease,25867
+Respiratory,480,Pneumonia,24618
+Respiratory,480.1,Bacterial pneumonia,4734
+Respiratory,480.11,Pneumococcal pneumonia,2542
+Respiratory,480.12,Pseudomonal pneumonia,470
+Respiratory,480.13,MRSA pneumonia,373
+Respiratory,480.2,Viral pneumonia,853
+Respiratory,480.3,Pneumonia due to fungus (mycoses),619
+Respiratory,480.5,Bronchopneumonia and lung abscess,487
+Respiratory,481,Influenza,8588
+Respiratory,483,Acute bronchitis and bronchiolitis,18608
+Respiratory,495,Asthma,47664
+Respiratory,495.1,Chronic obstructive asthma,1462
+Respiratory,495.11,Chronic obstructive asthma with exacerbation,366
+Respiratory,495.2,Asthma with exacerbation,11448
+Respiratory,496,Chronic airway obstruction,18308
+Respiratory,496.1,Emphysema,5959
+Respiratory,496.2,Chronic bronchitis,14641
+Respiratory,496.21,Obstructive chronic bronchitis,13399
+Respiratory,496.3,Bronchiectasis,2455
+Respiratory,497,Bronchitis,10259
+Respiratory,498,Acute bronchospasm,2883
+Respiratory,499,Cystic fibrosis,851
+Respiratory,500,Lung disease due to external agents,1728
+Respiratory,500.1,Extrinsic allergic alveolitis,385
+Respiratory,500.2,Pneumoconiosis,249
+Respiratory,501,Pneumonitis due to inhalation of food or vomitus,1936
+Respiratory,502,Postinflammatory pulmonary fibrosis,4042
+Respiratory,503,Pulmonary congestion and hypostasis,2106
+Respiratory,504,Other alveolar and parietoalveolar pneumonopathy,3328
+Respiratory,504.1,Idiopathic fibrosing alveolitis,1546
+Respiratory,505,Other pulmonary inflamation or edema,4903
+Respiratory,506,Empyema and pneumothorax,6161
+Respiratory,507,Pleurisy; pleural effusion,8559
+Respiratory,508,Pulmonary collapse; interstitial and compensatory emphysema,6671
+Respiratory,509,"Respiratory failure, insufficiency, arrest",12128
+Respiratory,509.1,Respiratory failure,6591
+Respiratory,509.2,Respiratory insufficiency,3940
+Respiratory,509.3,Pulmonary insufficiency or respiratory failure following trauma and surgery,3438
+Respiratory,509.5,Respiratory arrest,139
+Respiratory,509.8,Dependence on respirator [Ventilator] or supplemental oxygen,5601
+Respiratory,510,Other diseases of lung,18573
+Respiratory,510.2,Lung transplant,595
+Respiratory,512,Other symptoms of respiratory system,93889
+Respiratory,512.1,Wheezing,7779
+Respiratory,512.2,Painful respiration,12313
+Respiratory,512.3,Abnormal chest sounds,1290
+Respiratory,512.7,Shortness of breath,45631
+Respiratory,512.8,Cough,55478
+Respiratory,512.9,Other dyspnea,45411
+Respiratory,513,Respiratory abnormalities,56760
+Respiratory,513.3,Hypoventilation,4259
+Respiratory,513.31,Apnea,2368
+Respiratory,513.32,Orthopnea,959
+Respiratory,513.4,Hyperventilation,1627
+Respiratory,513.8,Disorders of diaphragm,889
+Respiratory,514,Abnormal findings examination of lungs,16265
+Respiratory,514.1,Abnormal results of function study of pulmonary system,1462
+Respiratory,514.2,Solitary pulmonary nodule,8969
+Respiratory,516,Abnormal sputum,3231
+Respiratory,516.1,Hemoptysis,2619
+Respiratory,519,"Other diseases of respiratory system, not elsewhere classified",21512
+Respiratory,519.1,Tracheostomy complications,443
+Respiratory,519.2,Respiratory complications,1114
+Respiratory,519.8,"Other diseases of respiratory system, NEC",7482
+Respiratory,519.9,Symptoms involving respiratory system and other chest symptoms,13153
