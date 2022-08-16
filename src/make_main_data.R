@@ -567,6 +567,9 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   combined[, skin_cancer_cat := fifelse(skin_cancer == 1, "Melanoma", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
   combined[, skin_cancer_cat := relevel(factor(skin_cancer_cat), ref = "No cancer")]
   
+  combined[, heme_malign_cat := fifelse(heme_malign == 1, "Hematologic malignancies", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
+  combined[, heme_malign_cat := relevel(factor(heme_malign_cat), ref = "No cancer")]
+  
   combined[, lymphoid_cat := fifelse(lymphoid == 1, "Lymphoid", fifelse(AnyCancerPhe == 1, "Other cancer", "No cancer"))]
   combined[, lymphoid_cat := relevel(factor(lymphoid_cat), ref = "No cancer")]
   
@@ -607,9 +610,9 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   # -----------
   if (save == TRUE) {
     cli::cli_alert_info("saving whole_data object")
-    saveRDS(object = combined, file = glue::glue("objects/whole_data_{chrt}.rds"))
+    saveRDS(object = combined, file = glue::glue("data/whole_data_{chrt}.rds"))
     cli::cli_alert_info("saving main_data object (tested positive only)")
-    saveRDS(object = combined[`Test Results` == 1], file = glue::glue("objects/main_data_{chrt}.rds"))
+    saveRDS(object = combined[`Test Results` == 1], file = glue::glue("data/main_data_{chrt}.rds"))
   }
   
   return(combined)
