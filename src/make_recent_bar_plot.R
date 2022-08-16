@@ -1,4 +1,4 @@
-make_recent_bar_plot <- function(data_input) {
+make_recent_bar_plot <- function(data_input, chrt_vsn = "20220801") {
   
   sum_tab <- data.table(
     comp = c(rep("Severe COVID", 3), rep("Hospitalization", 3), rep("ICU admission", 3), rep("Fatality", 3)),
@@ -64,7 +64,7 @@ make_recent_bar_plot <- function(data_input) {
       legend.title = element_blank()
     )
   
-  pdf(file = "objects/recent_bar_plot.pdf", width = 9,  height = 6)
+  pdf(file = paste0("objects/", chrt_vsn, "/recent_bar_plot.pdf"), width = 9,  height = 6)
   print(bar_plot)
   dev.off()
   

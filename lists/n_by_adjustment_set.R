@@ -37,4 +37,4 @@ simple <- merge(merge(
 tmp3[, .(type, `AdjSet3` = n)],
 by = "type")[order(order)][, !c("order")]
 
-write.xlsx(simple, file = "objects/n_by_adjustment_set.xlsx", overwrite = TRUE)
+write.xlsx(simple, file = paste0("objects/", cohort_version,"/n_by_adjustment_set.xlsx"), overwrite = TRUE)

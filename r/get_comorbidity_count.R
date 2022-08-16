@@ -2,7 +2,7 @@
 source("libraries.R")
 purrr::walk(list.files("src/"), ~source(paste0("src/", .x)))
 
-chrt <- "20220701"
+chrt <- "20220801"
 
 # load file paths
 file_paths <- get_file_paths(cohort = chrt)
@@ -17,7 +17,7 @@ comorbidities <- purrr::map_dfr(names(comorbidities),
            ))
 
 # load cohort data
-whole <- readRDS("data/whole_data_20220701.rds")
+whole <- readRDS(paste0("data/whole_data_", chrt,".rds"))
 
 # load phecode data
 icd_phecode <- fst::read_fst(paste0("data/processed_phecode_data_", chrt, ".fst"), as.data.table = TRUE)
@@ -56,4 +56,4 @@ out <- merge.data.table(
 )[, .(class, phecode, description, count = N)][order(class, phecode)][, class := stringr::str_to_title(class)][]
 
 # save
-fwrite(out, "lists/comorbidities_count.csv")
+fwrite(out, paste0("objects/", chrt,"/comorbidities_count.csv"))

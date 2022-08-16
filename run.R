@@ -3,12 +3,11 @@ source("libraries.R")
 purrr::walk(list.files("src/"), ~source(paste0("src/", .x)))
 source("lists/adjustment_sets.R")
 
-# cancer_types <- c("skin_cancer", "lymphoid", "myeloid", "kidney_cancer", "bladder_cancer", "colorectal_cancer", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
-
-cohort_version <- "20220701"
+cohort_version <- "20220801"
+dir.create(paste0("objects/", cohort_version))
 
 # data -----------
-# whole <- make_main_data(save = FALSE)
+# whole <- make_main_data(save = FALSE, chrt = "20220801")
 # saveRDS(whole, paste0("data/whole_data_", cohort_version, ".rds"))
 # saveRDS(whole[`Test Results` == 1], paste0("data/main_data_", cohort_version, ".rds"))
 whole <- readRDS(paste0("data/whole_data_", cohort_version, ".rds"))
@@ -57,9 +56,9 @@ results_part_1 <- list(
 )
 
 purrr::walk(names(results_part_1),
-           ~saveRDS(object = results_part_1[[.x]], file = paste0("objects/", .x, ".rds")))
+           ~saveRDS(object = results_part_1[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".rds")))
 purrr::walk(names(results_part_1),
-            ~fwrite(x = results_part_1[[.x]][["clean"]], file = paste0("objects/", .x, ".csv")))
+            ~fwrite(x = results_part_1[[.x]][["clean"]], file = paste0("objects/", cohort_version, "/", .x, ".csv")))
 
   # interaction analyses -----------
   main_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "AnyCancerPhe", reference_level = "0")
@@ -68,7 +67,7 @@ purrr::walk(names(results_part_1),
 main_int_results <- list(main_interaction = main_interaction, main_interaction_cancer_reference = main_interaction_cancer_reference)
 purrr::walk(
     names(main_int_results),
-    ~saveRDS(object = main_int_results[[.x]], file = paste0("objects/", .x, ".rds"))
+    ~saveRDS(object = main_int_results[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".rds"))
   )
 ## recent cancer analyses ----------
 # any cancer
@@ -78,19 +77,19 @@ recent_cancer_treatment <- main_analysis_2.0(exposure = "new_recent_cancer_treat
 recent_res <- list(recent_any_cancer = recent_any_cancer, recent_cancer_treatment = recent_cancer_treatment)
 purrr::walk(
   names(recent_res),
-  ~saveRDS(object = recent_res[[.x]], file = paste0("objects/", .x, ".rds"))
+  ~saveRDS(object = recent_res[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".rds"))
 )
 purrr::walk(
   names(recent_res),
-  ~fwrite(x = recent_res[[.x]][["clean"]], file = paste0("objects/", .x, ".csv"))
+  ~fwrite(x = recent_res[[.x]][["clean"]], file = paste0("objects/", cohort_version, "/", .x, ".csv"))
 )
 
   # interaction analyses ----------
   recent_interaction                  <- interaction_analysis(dataset = "main", interaction_var = "yscancer_category", reference_level = "No cancer")
   recent_interaction_cancer_reference <- interaction_analysis(dataset = "main", interaction_var = "yscancer_category", reference_level = "[0,3)")
   
-  saveRDS(object = recent_interaction, file = "objects/recent_interaction.rds")  
-  saveRDS(object = recent_interaction_cancer_reference, file = "objects/recent_interaction_cancer_reference.rds")
+  saveRDS(object = recent_interaction, file = paste0("objects/", cohort_version, "/recent_interaction.rds"))  
+  saveRDS(object = recent_interaction_cancer_reference, file = paste0("objects/", cohort_version, "/", "recent_interaction_cancer_reference.rds"))
 
 # vaccination analyses ----------
 vax_analysis                  <- vaccine_analysis(reference_level = "0")
@@ -98,8 +97,8 @@ vax_analysis_cancer_reference <- vaccine_analysis(reference_level = "1")
 
 vax_res <- list(vax_analysis = vax_analysis, vax_analysis_cancer_reference = vax_analysis_cancer_reference)
 
-purrr::walk(names(vax_res), ~saveRDS(object = vax_res[[.x]], file = paste0("objects/", .x, ".rds")))
-purrr::walk(names(vax_res), ~fwrite(x = vax_res[[.x]][["clean"]], file = paste0("objects/", .x, ".csv")))
+purrr::walk(names(vax_res), ~saveRDS(object = vax_res[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".rds")))
+purrr::walk(names(vax_res), ~fwrite(x = vax_res[[.x]][["clean"]], file = paste0("objects/", cohort_version, "/", .x, ".csv")))
 
 
 # vax: ever/never
@@ -129,7 +128,7 @@ vax_ev <- list(
 tidy_vax_ev <- purrr::map(names(vax_ev), ~tidy_model_output(vax_ev[[.x]]))
 names(tidy_vax_ev) <- names(vax_ev)
 
-purrr::walk(names(tidy_vax_ev), ~fwrite(x = tidy_vax_ev[[.x]], file = paste0("objects/", .x, ".csv")))
+purrr::walk(names(tidy_vax_ev), ~fwrite(x = tidy_vax_ev[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".csv")))
 
 # vax_ev_2020 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2020")), control = logistf.control(maxit = 1000))
 # vax_ev_2021 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2021")), control = logistf.control(maxit = 1000))
@@ -159,67 +158,75 @@ heme_vax_mods <- list(
 tidy_heme_vax_mods <- purrr::map(names(heme_vax_mods), ~tidy_model_output(heme_vax_mods[[.x]]))
 names(tidy_heme_vax_mods) <- names(heme_vax_mods)
 
-purrr::walk(names(tidy_heme_vax_mods), ~fwrite(x = tidy_heme_vax_mods[[.x]], file = paste0("objects/", .x, ".csv")))
+purrr::walk(names(tidy_heme_vax_mods), ~fwrite(x = tidy_heme_vax_mods[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".csv")))
 
 
 # plots and figures -----------
 source("lists/n_by_adjustment_set.R")
   
-rmarkdown::render("objects/table1.Rmd")
+rmarkdown::render("objects/table1.Rmd", output_file = paste0("objects/", cohort_version, "/table1.html"))
   
-make_bar_plot(data_input = main)
-make_recent_bar_plot(data_input = main)
+make_bar_plot(data_input = main, chrt_vsn = cohort_version)
+make_recent_bar_plot(data_input = main, chrt_vsn = cohort_version)
 
   make_forest_plot(
     no_cancer_results = tidy_table(main_interaction, cr = FALSE),
     cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
-    outcome = "severe_covid"
+    outcome = "severe_covid",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(main_interaction, cr = FALSE),
     cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
-    outcome = "hospitalization"
+    outcome = "hospitalization",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(main_interaction, cr = FALSE),
     cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
-    outcome = "icu_admission"
+    outcome = "icu_admission",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(main_interaction, cr = FALSE),
     cancer_results = tidy_table(main_interaction_cancer_reference, cr = TRUE),
-    outcome = "deceased"
+    outcome = "deceased",
+    chrt_vsn = cohort_version
   )
   
   make_forest_plot(
     no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE, manual_term = "yscancer_category[0,3)"),
     cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE, manual_term = "yscancer_categoryNo cancer"),
     outcome = "severe_covid",
-    other = "_recent"
+    other = "_recent",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE, manual_term = "yscancer_category[0,3)"),
     cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE, manual_term = "yscancer_categoryNo cancer"),
     outcome = "hospitalization",
-    other = "_recent"
+    other = "_recent",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE, manual_term = "yscancer_category[0,3)"),
     cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE, manual_term = "yscancer_categoryNo cancer"),
     outcome = "icu_admission",
-    other = "_recent"
+    other = "_recent",
+    chrt_vsn = cohort_version
   )
   make_forest_plot(
     no_cancer_results = tidy_table(recent_interaction, rec = TRUE, cr = FALSE, manual_term = "yscancer_category[0,3)"),
     cancer_results = tidy_table(recent_interaction_cancer_reference, rec = TRUE, cr = TRUE, manual_term = "yscancer_categoryNo cancer"),
     outcome = "deceased",
-    other = "_recent"
+    other = "_recent",
+    chrt_vsn = cohort_version
   )
   
-make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID")
-make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization")
-make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission")
-make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality")
+make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID", chrt_vsn = cohort_version)
+make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization", chrt_vsn = cohort_version)
+make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission", chrt_vsn = cohort_version)
+make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality", chrt_vsn = cohort_version)
 
 # supplement ---------
 

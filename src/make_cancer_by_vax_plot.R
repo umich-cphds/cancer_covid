@@ -1,4 +1,4 @@
-make_cancer_by_vax_plot <- function(outcome, title, cancer_var = "AnyCancerPhe", env_name = .GlobalEnv, kable_digits = NULL, ref_level = "0") {
+make_cancer_by_vax_plot <- function(outcome, title, cancer_var = "AnyCancerPhe", env_name = .GlobalEnv, kable_digits = NULL, ref_level = "0", chrt_vsn = "20220801") {
   
   unvax_mod_text <- glue("logistf({outcome} ~ factor(vax_status) + factor({cancer_var}) + factor(vax_status):factor({cancer_var}) + factor(i2020) + {paste(adj_sets[['adj3']], collapse = ' + ')}, data = main %>% mutate(vax_status = relevel(factor(vax_status), ref = 'Before vaccination'), {cancer_var} = relevel(factor({cancer_var}), ref = '{ref_level}')), control = logistf.control(maxit = 1000))")
   pvax_mod_text <- glue("logistf({outcome} ~ factor(vax_status) + factor({cancer_var}) + factor(vax_status):factor({cancer_var}) + factor(i2020) + {paste(adj_sets[['adj3']], collapse = ' + ')}, data = main %>% mutate(vax_status = relevel(factor(vax_status), ref = 'Partially vaccinated'), {cancer_var} = relevel(factor({cancer_var}), ref = '{ref_level}')), control = logistf.control(maxit = 1000))")
@@ -70,9 +70,9 @@ make_cancer_by_vax_plot <- function(outcome, title, cancer_var = "AnyCancerPhe",
       plot.title = element_text(face = "bold")
     )
   
-  ggsave(filename = glue("objects/{outcome}_cancer_by_vax_plot.pdf"), width = 8, height = 4,
+  ggsave(filename = paste0("objects/", chrt_vsn, "/", outcome, "_cancer_by_vax_plot.pdf"), width = 8, height = 4,
          plot = tmp_plot)
   
-  cli::cli_alert_success("plot saved at objects/{outcome}_cancer_by_vax_plot.pdf")
+  cli::cli_alert_success("plot saved at objects/{chrt_vsn}/{outcome}_cancer_by_vax_plot.pdf")
   
 }

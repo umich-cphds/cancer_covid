@@ -1,4 +1,4 @@
-make_forest_plot <- function(no_cancer_results, cancer_results, outcome, other = "", y_intercept = 28.5) {
+make_forest_plot <- function(no_cancer_results, cancer_results, outcome, other = "", y_intercept = 28.5, chrt_vsn = "20220801") {
   
   tab <- merge.data.table(
     as.data.table(cancer_results[[outcome]])[, .(term, cancer_print, cancer_p_value)],
@@ -86,7 +86,7 @@ make_forest_plot <- function(no_cancer_results, cancer_results, outcome, other =
     theme(plot.margin = margin(5, 0, 35, 0))+
     geom_hline(aes(yintercept = y_intercept, colour = 'black'), size = 0.5)
   
-  pdf(file = paste0("objects/", outcome, other, "_forest_plot.pdf"), width = 12,  height = 10)
+  pdf(file = paste0("objects/", chrt_vsn, "/", outcome, other, "_forest_plot.pdf"), width = 12,  height = 10)
   print(cowplot::plot_grid(ors_table, tmp_forest, pvalues_table, align = "h",
                            ncol = 3, rel_widths = c(4/8, 2.4/8,1.6/8)))
   dev.off()

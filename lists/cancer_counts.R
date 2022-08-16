@@ -26,5 +26,5 @@ cancer_counts <- merge.data.table(
   by = "phecode"
   )
 
-write.xlsx(x = cancer_counts, file = "objects/cancer_counts.xlsx", overwrite = TRUE)
+write.xlsx(x = cancer_counts, file = paste0("objects/", cohort_version, "/cancer_counts.xlsx"), overwrite = TRUE)
 
