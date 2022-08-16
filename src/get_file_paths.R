@@ -4,6 +4,13 @@ get_file_paths <- function(cohort) {
   
   comorbid_path <- "/net/wonderland/home/mmsalva/projects/covid/new_cancer/lists/comorbidities.rds"
   
+  if (cohort == "20220801") {
+    cov_path      <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220801/MichiganMedicine_PCRcohort_plus_VaccinationData_20220801.Rsav"
+    proc_path     <- "/net/junglebook/michiganmedicine/data/Data_Pulls_from_Data_Office/HPI_5883/20220801/Procedures_2022-08-02.txt"
+    icd9_path     <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220801/phenomes/UNFILTERED_20220801/UNFILTERED_20220801_ICD9_Phecodes_Birthyears.Rsav"
+    icd10_path    <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220801/phenomes/UNFILTERED_20220801/UNFILTERED_20220801_ICD10_Phecodes_Birthyears.Rsav"
+  }
+  
   if (cohort == "20220701") {
     cov_path      <- "/net/junglebook/michiganmedicine/data/PCR_Tested_Cohort/20220701/MichiganMedicine_PCRcohort_plus_VaccinationData_20220701.Rsav"
     proc_path     <- "/net/junglebook/michiganmedicine/data/Data_Pulls_from_Data_Office/HPI_5883/20220701/Procedures_2022-07-02.txt"
