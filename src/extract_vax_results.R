@@ -1,5 +1,5 @@
 extract_vax_results <- function(x, ref, trm) {
-  tmp <- broomExtra::tidy_parameters(x, df_method = "wald") |> as.data.table()
+  tmp <- broomExtra::tidy_parameters(x, ci_method = "wald") |> as.data.table()
   
   out <- data.table(
     "stat" = c("beta", "se_beta", "conf_lo", "conf_hi", "p_val"),

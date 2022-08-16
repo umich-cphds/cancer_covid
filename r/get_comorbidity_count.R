@@ -20,7 +20,7 @@ comorbidities <- purrr::map_dfr(names(comorbidities),
 whole <- readRDS(paste0("data/whole_data_", chrt,".rds"))
 
 # load phecode data
-icd_phecode <- fst::read_fst(paste0("data/processed_phecode_data_", chrt, ".fst"), as.data.table = TRUE)
+icd_phecode <- fst::read_fst(paste0("data/", chrt, "/processed_phecode_data_", chrt, ".fst"), as.data.table = TRUE)
 
 # subset to those in cohort and with comorbidity codes
 comorbid_phecode <- icd_phecode[id %in% whole[, id]][phecode %in% comorbidities[, phecode]]

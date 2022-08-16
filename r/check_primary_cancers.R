@@ -6,10 +6,10 @@ purrr::walk(list.files("src/"), ~source(paste0("src/", .x)))
 ## load cancer phecodes
 source("lists/cancer_codes.R")
 
-chrt <- "20220701"
+chrt <- "20220801"
 
 ## load icd phecode data
-icd_phecode <- fst::read_fst(paste0("data/processed_phecode_data", chrt, ".fst"), as.data.table = TRUE)
+icd_phecode <- fst::read_fst(paste0("data/", chrt, "/processed_phecode_data_", chrt, ".fst"), as.data.table = TRUE)
 icd_phecode <- icd_phecode[phecode %in% codes$cancer_phecodes]
 pheinfo <- get(load(file = "/net/junglebook/michiganmedicine/larsf/data/phenomes/Phecode_Definitions_1.2_Full.Rsav"))
 

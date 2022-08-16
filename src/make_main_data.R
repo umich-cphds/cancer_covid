@@ -9,11 +9,7 @@ make_main_data <- function(save = TRUE, chrt = "20220701") {
   comorbid_path <- file_paths$comorbidities
   
   # load phecode data ----------
-  icd_phecode_tested <- load_icd_phecode_tested_data(
-    icd9_path  = file_paths$icd9,
-    icd10_path = file_paths$icd10
-  )
-  icd_phecode        <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
+  icd_phecode <- make_processed_phecode_data(cohort = chrt, fl_pths = file_paths)
   
   # load PCRcohort data -----------
   load(cov_path)

@@ -5,11 +5,12 @@ source("lists/adjustment_sets.R")
 
 cohort_version <- "20220801"
 dir.create(paste0("objects/", cohort_version))
+dir.create(paste0("data/", cohort_version))
 
 # data -----------
-# whole <- make_main_data(save = FALSE, chrt = "20220801")
-# saveRDS(whole, paste0("data/whole_data_", cohort_version, ".rds"))
-# saveRDS(whole[`Test Results` == 1], paste0("data/main_data_", cohort_version, ".rds"))
+whole <- make_main_data(save = FALSE, chrt = "20220801")
+saveRDS(whole, paste0("data/whole_data_", cohort_version, ".rds"))
+saveRDS(whole[`Test Results` == 1], paste0("data/main_data_", cohort_version, ".rds"))
 whole <- readRDS(paste0("data/whole_data_", cohort_version, ".rds"))
 main  <- readRDS(paste0("data/main_data_", cohort_version, ".rds"))
 
