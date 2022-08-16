@@ -9,33 +9,33 @@ cohort_version <- "20220701"
 
 # data -----------
 # whole <- make_main_data(save = FALSE)
-# saveRDS(whole, paste0("data/whole_data_", cohort_version, ".rds))
-# saveRDS(whole[`Test Results` == 1], paste0("data/main_data_", cohort_version, ".rds))
+# saveRDS(whole, paste0("data/whole_data_", cohort_version, ".rds"))
+# saveRDS(whole[`Test Results` == 1], paste0("data/main_data_", cohort_version, ".rds"))
 whole <- readRDS(paste0("data/whole_data_", cohort_version, ".rds"))
 main  <- readRDS(paste0("data/main_data_", cohort_version, ".rds"))
 
-# main analyses -----------
-any_cancer            <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
-any_cancer_time_strat <- main_analysis(dataset = "main", exposure_var = "yscancer_category")
+## main analyses -----------
+# any cancer
+any_cancer            <- main_analysis_2.0(exposure = "AnyCancerPhe", dat = main)
+any_cancer_time_strat <- main_analysis_2.0(exposure = "yscancer_category", dat = main)
 
-skin_cancer_mods       <- main_analysis(dataset = "main", exposure_var = "skin_cancer_cat")
-lymphoid_mods          <- main_analysis(dataset = "main", exposure_var = "lymphoid_cat")
-myeloid_mods           <- main_analysis(dataset = "main", exposure_var = "myeloid_cat")
-bladder_cancer_mods    <- main_analysis(dataset = "main", exposure_var = "bladder_cancer_cat")
-kidney_cancer_mods     <- main_analysis(dataset = "main", exposure_var = "kidney_cancer_cat")
-colorectal_cancer_mods <- main_analysis(dataset = "main", exposure_var = "colorectal_cancer_cat")
-# heme_malign_mods     <- main_analysis(dataset = "main", exposure_var = "heme_malign_cat")
-breast_cancer_mods     <- main_analysis(dataset = "main[Sex == 'F']", exposure_var = "breast_cancer_cat")
-prostate_cancer_mods   <- main_analysis(dataset = "main[Sex == 'M']", exposure_var = "prostate_cancer_cat")
-lung_cancer_mods       <- main_analysis(dataset = "main", exposure_var = "lung_cancer_cat")
+# by cancer site
+skin_cancer_mods       <- main_analysis_2.0(exposure = "skin_cancer_cat", dat = main)
+heme_malign_mods       <- main_analysis_2.0(exposure = "heme_malign_cat", dat = main)
+lymphoid_mods          <- main_analysis_2.0(exposure = "lymphoid_cat", dat = main)
+myeloid_mods           <- main_analysis_2.0(exposure = "myeloid_cat", dat = main)
+bladder_cancer_mods    <- main_analysis_2.0(exposure = "bladder_cancer_cat", dat = main)
+kidney_cancer_mods     <- main_analysis_2.0(exposure = "kidney_cancer_cat", dat = main)
+colorectal_cancer_mods <- main_analysis_2.0(exposure = "colorectal_cancer_cat", dat = main)
+breast_cancer_mods     <- main_analysis_2.0(exposure = "breast_cancer_cat", dat = main[Sex == "F"])
+prostate_cancer_mods   <- main_analysis_2.0(exposure = "prostate_cancer_cat", dat = main[Sex == "M"])
+lung_cancer_mods       <- main_analysis_2.0(exposure = "lung_cancer_cat", dat = main)
 
-
-# cancer_type           <- main_analysis(dataset = "main", exposure_var = cancer_types)
-# cancer_type           <- main_analysis(dataset = "main", exposure_var = "cancer_type")
-cancer_treatment      <- main_analysis(dataset = "main", exposure_var = "cancer_treatment")
-chemo_strat           <- main_analysis(dataset = "main", exposure_var = "chemo_strat_treatment")
-no_heme_treatment     <- main_analysis(dataset = "main[lymphoid == 0 & myeloid == 0]", exposure_var = "cancer_treatment")
-no_heme_chemo_strat   <- main_analysis(dataset = "main[lymphoid == 0 & myeloid == 0]", exposure_var = "chemo_strat_treatment")
+# by cancer treatment
+cancer_treatment    <- main_analysis_2.0(exposure = "cancer_treatment", dat = main)
+chemo_strat         <- main_analysis_2.0(exposure = "chemo_strat_treatment", dat = main)
+no_heme_treatment   <- main_analysis_2.0(exposure = "cancer_treatment", dat = main[heme_malign == 0])
+no_heme_chemo_strat <- main_analysis_2.0(exposure = "cancer_treatment", dat = main[heme_malign == 0])
 
 # save results
 results_part_1 <- list(
@@ -70,9 +70,10 @@ purrr::walk(
     names(main_int_results),
     ~saveRDS(object = main_int_results[[.x]], file = paste0("objects/", .x, ".rds"))
   )
-# recent cancer analyses ----------
-recent_any_cancer       <- main_analysis(dataset = "main", exposure_var = "recent_AnyCancerPhe")
-recent_cancer_treatment <- main_analysis(dataset = "main", exposure_var = "new_recent_cancer_treatment")
+## recent cancer analyses ----------
+# any cancer
+recent_any_cancer       <- main_analysis_2.0(exposure = "recent_AnyCancerPhe", dat = main)
+recent_cancer_treatment <- main_analysis_2.0(exposure = "new_recent_cancer_treatment", dat = main)
 
 recent_res <- list(recent_any_cancer = recent_any_cancer, recent_cancer_treatment = recent_cancer_treatment)
 purrr::walk(
@@ -132,9 +133,9 @@ names(tidy_vax_ev) <- names(vax_ev)
 
 purrr::walk(names(tidy_vax_ev), ~fwrite(x = tidy_vax_ev[[.x]], file = paste0("objects/", .x, ".csv")))
 
-vax_ev_2020 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2020")), control = logistf.control(maxit = 1000))
-vax_ev_2021 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2021")), control = logistf.control(maxit = 1000))
-vax_ev_2022 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2022")), control = logistf.control(maxit = 1000))
+# vax_ev_2020 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2020")), control = logistf.control(maxit = 1000))
+# vax_ev_2021 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2021")), control = logistf.control(maxit = 1000))
+# vax_ev_2022 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2022")), control = logistf.control(maxit = 1000))
 
 vax_year <- list(
   vax_ev_2020 = vax_ev_2020,
