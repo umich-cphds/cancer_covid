@@ -1,6 +1,6 @@
 # libraries -----------
 ally::libri(tidyverse, data.table, cli, janitor, logistf, broom, broomExtra,
-            glue, ggstance, cowplot, openxlsx, table1, RColorBrewer)
+            glue, ggstance, cowplot, openxlsx, table1, RColorBrewer, fst)
 
 # suppressPackageStartupMessages({
 #   library(tidyverse)
