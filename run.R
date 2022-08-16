@@ -5,10 +5,12 @@ source("lists/adjustment_sets.R")
 
 cancer_types <- c("skin_cancer", "lymphoid", "myeloid", "kidney_cancer", "bladder_cancer", "colorectal_cancer", "breast_cancer", "prostate_cancer", "lung_cancer", "other_cancer")
 
+cohort_version <- "20220701"
+
 # data -----------
 # whole <- make_main_data(save = FALSE)
-whole <- readRDS("objects/whole_data_20220701.rds")
-main  <- readRDS("objects/main_data_20220701.rds")
+whole <- readRDS(paste0("data/whole_data_", cohort_version, ".rds"))
+main  <- readRDS(paste0("data/main_data_", cohort_version, ".rds"))
 
 # main analyses -----------
 any_cancer            <- main_analysis(dataset = "main", exposure_var = "AnyCancerPhe")
