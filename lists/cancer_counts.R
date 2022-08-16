@@ -1,7 +1,7 @@
 library(data.table)
 library(openxlsx)
 
-main <- readRDS(paste0("data/main_data_", chrt, ".rds"))
+main <- readRDS(paste0("data/main_data_", cohort_version, ".rds"))
 main_ids <- main[, unique(id)]
 
 codes         <- readRDS("lists/cancer_codes.rds")
