@@ -1,8 +1,8 @@
 make_processed_phecode_data <- function(cohort = "20220801", fl_pths) {
   
-  if (file.exists(paste0("objects/", cohort, "/processed_phecode_data_", cohort, ".fst"))) {
-    message(paste0("File already exists... objects/", cohort, "/processed_phecode_data_", cohort, ".fst"))
-    icd_phecode <- fst::read_fst(paste0("objects/", cohort, "/processed_phecode_data_", cohort, ".fst"), as.data.table = TRUE)
+  if (file.exists(paste0("data/", cohort, "/processed_phecode_data_", cohort, ".fst"))) {
+    message(paste0("File already exists... data/", cohort, "/processed_phecode_data_", cohort, ".fst"))
+    icd_phecode <- fst::read_fst(paste0("data/", cohort, "/processed_phecode_data_", cohort, ".fst"), as.data.table = TRUE)
   } else {
     
     # paths -------------
@@ -17,7 +17,7 @@ make_processed_phecode_data <- function(cohort = "20220801", fl_pths) {
     )
     icd_phecode        <- sex_concordance_check(x = icd_phecode_tested, tested = TRUE)
     
-    fst::write_fst(icd_phecode, paste0("objects/", cohort, "/processed_phecode_data_", cohort, ".fst"), compress = 100)
+    fst::write_fst(icd_phecode, paste0("data/", cohort, "/processed_phecode_data_", cohort, ".fst"), compress = 100)
   }
   
   return(icd_phecode)
