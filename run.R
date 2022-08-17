@@ -35,13 +35,14 @@ lung_cancer_mods       <- main_analysis_2.0(exposure = "lung_cancer_cat", dat = 
 cancer_treatment    <- main_analysis_2.0(exposure = "cancer_treatment", dat = main)
 chemo_strat         <- main_analysis_2.0(exposure = "chemo_strat_treatment", dat = main)
 no_heme_treatment   <- main_analysis_2.0(exposure = "cancer_treatment", dat = main[heme_malign == 0])
-no_heme_chemo_strat <- main_analysis_2.0(exposure = "cancer_treatment", dat = main[heme_malign == 0])
+no_heme_chemo_strat <- main_analysis_2.0(exposure = "chemo_strat_treatment", dat = main[heme_malign == 0])
 
 # save results
 results_part_1 <- list(
   any_cancer             = any_cancer,
   any_cancer_time_strat  = any_cancer_time_strat,
   skin_cancer_mods       = skin_cancer_mods,
+  heme_malign_mods       = heme_malign_mods,
   lymphoid_mods          = lymphoid_mods,
   myeloid_mods           = myeloid_mods,
   bladder_cancer_mods    = bladder_cancer_mods,
@@ -165,7 +166,7 @@ purrr::walk(names(tidy_heme_vax_mods), ~fwrite(x = tidy_heme_vax_mods[[.x]], fil
 # plots and figures -----------
 source("lists/n_by_adjustment_set.R")
   
-rmarkdown::render("objects/table1.Rmd", output_file = paste0("objects/", cohort_version, "/table1.html"))
+rmarkdown::render("objects/table1.Rmd", output_file = paste0("/net/wonderland/home/mmsalva/projects/covid/new_cancer/objects/", cohort_version, "/table1.html"))
   
 make_bar_plot(data_input = main, chrt_vsn = cohort_version)
 make_recent_bar_plot(data_input = main, chrt_vsn = cohort_version)
@@ -233,5 +234,6 @@ make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality", chrt_vsn = co
 
   # get counts by cancer phecodes used to generate AnyCancerPhe
   source("lists/cancer_counts.R")
+  source("lists/treatment_patterns_upset_plot.R")
 
   # run `r/get_comorbidity_count.R` to generate numbers for Table S3
