@@ -60,9 +60,9 @@ make_cancer_by_vax_plot <- function(outcome, title, cancer_var = "AnyCancerPhe",
     
     # geom_point() +
     labs(
-      title = glue("OR for severe COVID corresponding to cancer status stratified by vaccination"),
+      title = glue("ORs for COVID-19 outcomes corresponding to cancer status stratified by vaccination status"),
       x = "Vaccination status",
-      y = "Odds ratio (95% CI)"
+      y = "Cancer status odds ratio (95% CI)"
     ) +
     theme_classic() +
     theme(
