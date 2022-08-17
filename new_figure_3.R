@@ -4,8 +4,10 @@ library(ggtext)
 library(RColorBrewer)
 library(glue)
 
-d  <- read_rds("../cancer_covid_revision/objects/vax_analysis.rds")
-dc <- read_rds("../cancer_covid_revision/objects/vax_analysis_cancer_reference.rds")
+chrt <- "20220801"
+
+d  <- read_rds(paste0("../cancer_covid_revision/objects/", chrt, "/vax_analysis.rds"))
+dc <- read_rds(paste0("../cancer_covid_revision/objects/", chrt, "/vax_analysis_cancer_reference.rds"))
 
 d$severe_covid$full %>%
   filter(term %in% paste0("factor(vax_status)", c(
@@ -125,9 +127,9 @@ plt_dat %>%
                   position = position_dodge(width = .5), width = 0.2, size = 1) +
   geom_point(data = int_dat %>% filter(sig == 1), aes(x = Term, y = 0), shape = 8, color = "black") +
   labs(
-    title = "Vaccination status OR for COVID-19 outcomes by cancer status",
+    title = "ORs for COVID-19 outcomes corresponding to vaccination status\nstratified by cancer status",
     x = "Vaccination status",
-    y = "Odds ratio (95% CI)",
+    y = "Vaccination status odds ratio (95% CI)",
     caption = "**Notes:**<br>
       - Error bars indicated 95% confidence interval<br>
       - '*' indicates p-value for interaction significant at 0.05 level"
@@ -143,4 +145,4 @@ plt_dat %>%
     plot.caption     = ggtext::element_markdown(hjust = 0),
     panel.spacing.x  = unit(1, "lines"))
 
-ggsave(filename = glue("../cancer_covid_revision/objects/vax_int_plot.pdf"), width = 8, height = 5.5)
+ggsave(filename = glue(paste0("../cancer_covid_revision/objects/", chrt, "/vax_int_plot.pdf")), width = 10, height = 5.5)

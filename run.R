@@ -225,11 +225,27 @@ make_recent_bar_plot(data_input = main, chrt_vsn = cohort_version)
     chrt_vsn = cohort_version
   )
   
-make_cancer_by_vax_plot(outcome = "`Severe COVID`", title = "severe COVID", chrt_vsn = cohort_version)
-make_cancer_by_vax_plot(outcome = "Hospitalized", title = "hospitalization", chrt_vsn = cohort_version)
-make_cancer_by_vax_plot(outcome = "ICU", title = "ICU admission", chrt_vsn = cohort_version)
-make_cancer_by_vax_plot(outcome = "Deceased", title = "mortality", chrt_vsn = cohort_version)
-
+  
+  cancer_by_vax_sc   <- cancer_by_vax_2.0(outcome = "`Severe COVID`", dat = "main")
+  cancer_by_vax_hosp <- cancer_by_vax_2.0(outcome = "Hospitalized", dat = "main")
+  cancer_by_vax_icu  <- cancer_by_vax_2.0(outcome = "ICU", dat = "main")
+  cancer_by_vax_dea  <- cancer_by_vax_2.0(outcome = "Deceased", dat = "main")
+  
+  clean_cancer_by_vax <- purrr::map_dfr(list(cancer_by_vax_sc, cancer_by_vax_hosp, cancer_by_vax_icu, cancer_by_vax_dea),
+             ~.x[["clean"]])
+  fwrite(clean_cancer_by_vax,
+         paste0("objects/", cohort_version, "/cancer_by_vax_clean.csv"))
+  
+  vbc2_plot <- make_vax_by_cancer_plot(d = vax_analysis, dc = vax_analysis_cancer_reference)
+  cbv2_plot <- make_cancer_by_vax_plot_2.0(clean_res = clean_cancer_by_vax)
+  
+  patched <- cbv2_plot/ vbc2_plot
+  
+  cairo_pdf(filename = paste0("objects/", cohort_version, "/stacked_cancer_vax_plots.pdf"), width = 10, height = 11)
+  patched +
+    plot_annotation(tag_levels = 'A') & theme(plot.tag.position = c(0, .985), plot.tag = element_text(face = "bold", size = 18))
+  dev.off()
+  
 # supplement ---------
 
   # get counts by cancer phecodes used to generate AnyCancerPhe
