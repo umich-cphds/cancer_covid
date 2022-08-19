@@ -9,7 +9,7 @@ library(tableone)
 setwd("objects")
 
 #version <- "20220202"
-version <- "20220701"
+version <- "20220801"
 
 ## Load PCR data
 
@@ -131,7 +131,7 @@ groups <- c("Cancer_COVID_Positive","Cancer_COVID_Negative","Cancer_COVID_Negati
 vars <- c("Deceased","CriticalCare","HospitalCare","NotHospitalized")
 
 ## compare with data from processed cohort
-processed.data <- readRDS("whole_data_20220701.rds")
+processed.data <- readRDS(paste0("data/", version, "/whole_data_", version, ".rds"))
 subPCRcohort <- PCRcohort[Encrypted_PatientID %in% processed.data[, id]]
 
 ## Matching
@@ -198,13 +198,13 @@ subPCRcohort_matched[,Cancer_COVID_Negative_Matched:=
 # PCRcohort_matched[!is.na(Cancer_COVID_Negative_Matched),table(Cancer)]
 
 
-save(PCRcohort_matched, file = paste0("Matched_Cohort_", version, ".Rsav"))
-save(subPCRcohort_matched, file = paste0("Matched_Cohort_Sub_", version, ".Rsav"))
+save(PCRcohort_matched, file = paste0("data/", version, "/Matched_Cohort_", version, ".Rsav"))
+save(subPCRcohort_matched, file = paste0("data/", version, "/Matched_Cohort_Sub_", version, ".Rsav"))
 # save(PCRcohort_matched,file=paste0("Matched_Cohort_",version,".Rsav"))
 
 ## Fill in outcomes
-load(file=paste0("Matched_Cohort_",version,".Rsav"))
-load(file=paste0("Matched_Cohort_Sub_",version,".Rsav"))
+load(file=paste0("data/", version, "/Matched_Cohort_", version, ".Rsav"))
+load(file=paste0("data/", version, "/Matched_Cohort_Sub_", version, ".Rsav"))
 
 
 PCRcohort_matched[,Deceased:=ifelse(DeceasedDaysSinceBirth >= DaysSinceBirth_KeyDate - 14 & DeceasedDaysSinceBirth <= DaysSinceBirth_KeyDate + 60,1,NA)]
@@ -267,7 +267,7 @@ for(i in 1:nrow(tableOut)){
 	}
 }
 
-fwrite(tableOut, file =paste0("Outcome_vs_Cancer_",version,".csv"))
+fwrite(tableOut, file =paste0("objects/", version, "/Outcome_vs_Cancer_",version,".csv"))
 
 
 ##
@@ -332,4 +332,4 @@ for(i in 1:nrow(subtableOut)){
   }
 }
 
-fwrite(subtableOut, file =paste0("Outcome_vs_Cancer_Sub_",version,".csv"))
+fwrite(subtableOut, file =paste0("objects/", version, "/Outcome_vs_Cancer_Sub_",version,".csv"))

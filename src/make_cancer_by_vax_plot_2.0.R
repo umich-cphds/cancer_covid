@@ -12,9 +12,9 @@ clean_res |>
     Outcome = factor(case_when(
       outcome == "Severe COVID" ~ "Severe COVID",
       outcome == "Hospitalized" ~ "Hospitalization",
-      outcome == "ICU" ~ "ICU Admission",
+      outcome == "ICU" ~ "ICU admission",
       outcome == "Deceased" ~ "Mortality"
-    ), levels = c("Severe COVID", "Hospitalization", "ICU Admission", "Mortality")),
+    ), levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality")),
     Term = vax_status,
     Term = ifelse(Term == "Fully vaccinated (no booster)", "Fully vaccinated\n(no booster)", Term),
     Term = factor(Term, levels = c("Before vaccination", "Partially vaccinated", "Fully vaccinated\n(no booster)", "Boosted"))

@@ -132,20 +132,7 @@ names(tidy_vax_ev) <- names(vax_ev)
 
 purrr::walk(names(tidy_vax_ev), ~fwrite(x = tidy_vax_ev[[.x]], file = paste0("objects/", cohort_version, "/", .x, ".csv")))
 
-# vax_ev_2020 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2020")), control = logistf.control(maxit = 1000))
-# vax_ev_2021 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2021")), control = logistf.control(maxit = 1000))
-# vax_ev_2022 <- logistf(`Severe COVID` ~ vax_ever + factor(AnyCancerPhe) + vax_ever:factor(AnyCancerPhe) + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(i2020 = relevel(i2020, ref = "2022")), control = logistf.control(maxit = 1000))
-
-# vax_year <- list(
-#   vax_ev_2020 = vax_ev_2020,
-#   vax_ev_2021 = vax_ev_2021,
-#   vax_ev_2022 = vax_ev_2022
-# )
-
-# tidy_vax_year <- purrr::map(names(vax_year), ~tidy_model_output(vax_year[[.x]]))
-# names(tidy_vax_year) <- names(vax_year)
-# 
-# purrr::walk(names(tidy_vax_year), ~fwrite(x = tidy_vax_year[[.x]], file = paste0("objects/", .x, ".csv")))
+main[, vax_full_plus := fifelse(vax_status %in% c("Boosted", "Fully vaccinated (no booster)"), 1, 0)][is.na(vax_status), vax_full_plus := NA]
 
 heme_vax_sc <- logistf(`Severe COVID` ~ vax_ever + heme_malign_cat + vax_ever:heme_malign_cat + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(heme_malign_cat = relevel(heme_malign_cat, ref = "Hematologic malignancies")), control = logistf.control(maxit = 1000))
 no_heme_vax_sc <- logistf(`Severe COVID` ~ vax_ever + heme_malign_cat + vax_ever:heme_malign_cat + Age + factor(Sex) + factor(RaceEthnicity4) + disadvantage2_13_17_qrtl + ComorbidityScore + i2020 + vax_ever:i2020, data = main %>% mutate(heme_malign_cat = relevel(heme_malign_cat, ref = "Other cancer")), control = logistf.control(maxit = 1000))
