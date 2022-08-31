@@ -31,7 +31,7 @@ clean_res |>
   labs(
     title = glue("ORs for COVID-19 outcomes corresponding to cancer status\nstratified by vaccination status"),
     x = "Vaccination status",
-    y = "Cancer status odds ratio (95% CI)"
+    y = "COVID-19 outcome odds ratio (95% CI)\ncorresponding to cancer status"
   ) +
   theme_classic() +
   theme(

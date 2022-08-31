@@ -14,16 +14,16 @@ canc_stat_cols <- c(
 
 ## load and prep plot data
 plot_data <- rbindlist(
-  purrr::map2(tmp, rep(c("Severe COVID", "Hospitalization", "ICU Admission", "Deceased"), 2), ~as.data.table(.x)[term == "ComorbidityScore"][, outcome := .y]))[, outcome := factor(outcome, levels = c("Severe COVID", "Hospitalization", "ICU Admission", "Deceased"))][]
+  purrr::map2(tmp, rep(c("Severe COVID", "Hospitalization", "ICU admission", "Mortality"), 2), ~as.data.table(.x)[term == "ComorbidityScore"][, outcome := .y]))[, outcome := factor(outcome, levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality"))][]
 
 ## identify significant interactions
-sig <- rbindlist(purrr::map2(tmp[1:4], c("Severe COVID", "Hospitalization", "ICU Admission", "Deceased"), ~as.data.table(.x)[term == "AnyCancerPhe1:ComorbidityScore"][, outcome := .y][, .(outcome, ref, p_value)][, sig := fifelse(p_value < 0.05, 1, 0)]))
+sig <- rbindlist(purrr::map2(tmp[1:4], c("Severe COVID", "Hospitalization", "ICU admission", "Mortality"), ~as.data.table(.x)[term == "AnyCancerPhe1:ComorbidityScore"][, outcome := .y][, .(outcome, ref, p_value)][, sig := fifelse(p_value < 0.05, 1, 0)]))
 
 ## plot
 plot_data |>
   ggplot(aes(x = outcome, y = estimate, color = ref)) +
   geom_hline(yintercept = 1, linetype = 2, color = "gray40", size = 1) +
-  geom_pointrange(aes(ymin = conf_low, ymax = conf_high), size = 1, position = position_dodge(.3)) +
+  geom_pointrange(aes(ymin = conf_low, ymax = conf_high), size = 1, position = position_dodge(.2)) +
   geom_point(data = sig[sig == 1], aes(x = outcome, y = 0.54), color = "black", shape = 8) +
   scale_color_manual(values = canc_stat_cols) +
   labs(
@@ -35,7 +35,7 @@ plot_data |>
       - '*' indicates p-value for interaction significant at 0.05 level<br>
       - Adjusted for age, sex, race/ethnicity, disadvantage index (quartile), and cancer status (ever/never)"
   ) +
-  ylim(0.5, NA) +
+  ylim(0.5, 2) +
   theme_classic() +
   theme(
     plot.title = element_text(face = "bold"),

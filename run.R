@@ -233,6 +233,18 @@ make_recent_bar_plot(data_input = main, chrt_vsn = cohort_version)
     plot_annotation(tag_levels = 'A') & theme(plot.tag.position = c(0, .985), plot.tag = element_text(face = "bold", size = 18))
   dev.off()
   
+  
+  cbv_sc_2020   <- cancer_by_vax_2.0(outcome = "`Severe COVID`", dat = "main[i2020 == '2020']")
+  cbv_sc_2021   <- cancer_by_vax_2.0(outcome = "`Severe COVID`", dat = "main[i2020 == '2021']")
+  cbv_sc_2022   <- cancer_by_vax_2.0(outcome = "`Severe COVID`", dat = "main[i2020 == '2022']")
+  
+  years <- c("2020", "2021", "2022")
+  cbv_list <- list(cbv_sc_2020, cbv_sc_2021, cbv_sc_2022)
+  clean_cbv <- purrr::imap_dfr(cbv_list,
+                                        ~.x[[.y]][["clean"]][, year := years[.y]])
+  fwrite(clean_cbv,
+         paste0("objects/", cohort_version, "/cbv_sc_year_clean.csv"))
+  
 # supplement ---------
 
   # get counts by cancer phecodes used to generate AnyCancerPhe

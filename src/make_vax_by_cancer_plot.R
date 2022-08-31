@@ -110,7 +110,7 @@ make_vax_by_cancer_plot <- function(d, dc) {
     labs(
       title = "ORs for COVID-19 outcomes corresponding to vaccination status\nstratified by cancer status",
       x = "Vaccination status",
-      y = "Vaccination status odds ratio (95% CI)",
+      y = "COVID-19 outcome odds ratio (95% CI)\ncorresponding to vaccination status",
       caption = "**Notes:**<br>
         - Error bars indicated 95% confidence interval<br>
         - '*' indicates p-value for interaction significant at 0.05 level"
