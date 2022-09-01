@@ -24,12 +24,12 @@ plot_data |>
   ggplot(aes(x = outcome, y = estimate, color = ref)) +
   geom_hline(yintercept = 1, linetype = 2, color = "gray40", size = 1) +
   geom_pointrange(aes(ymin = conf_low, ymax = conf_high), size = 1, position = position_dodge(.2)) +
-  geom_point(data = sig[sig == 1], aes(x = outcome, y = 0.54), color = "black", shape = 8) +
+  geom_point(data = sig[sig == 1], aes(x = outcome, y = 0.54), color = "black", shape = 8, size = 3) +
   scale_color_manual(values = canc_stat_cols) +
   labs(
-    title = "Comorbidity score odds ratio by COVID-19 outcome",
+    title = "Odds ratios for COVID-19 outcomes corresponding to comorbidity score\nstratified by cancer status",
     x = "Outcome",
-    y = "OR (95% CI)",
+    y = "COVID-19 outcome odds ratio (95% CI)\ncorresponding to comorbidity score",
     caption = "**Notes:**<br>
       - Error bars indicated 95% confidence interval<br>
       - '*' indicates p-value for interaction significant at 0.05 level<br>

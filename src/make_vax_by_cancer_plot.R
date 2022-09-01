@@ -63,7 +63,7 @@ make_vax_by_cancer_plot <- function(d, dc) {
       res$icu$full %>% filter(term %in% terms) %>%
         mutate(Outcome = "ICU admission"),
       res$deceased$full %>% filter(term %in% terms) %>%
-        mutate(Outcome = "Mortality")
+        mutate(Outcome = "Mortality\u2020")
     ) %>%
       mutate(
         Term = factor(case_when(
@@ -71,7 +71,7 @@ make_vax_by_cancer_plot <- function(d, dc) {
           term == "factor(vax_status)Fully vaccinated (no booster):factor(AnyCancerPhe)1" ~ "Fully vaccinated\n(no booster)",
           term == "factor(vax_status)Boosted:factor(AnyCancerPhe)1" ~ "Boosted"
         ), levels = c("Partially vaccinated", "Fully vaccinated\n(no booster)", "Boosted")),
-        Outcome = factor(Outcome, levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality"))
+        Outcome = factor(Outcome, levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality\u2020"))
     ) %>%
       mutate(
         sig = ifelse(p_value < 0.05, 1, NA)
@@ -93,8 +93,8 @@ make_vax_by_cancer_plot <- function(d, dc) {
         outcome == "severe_covid" ~ "Severe COVID",
         outcome == "hospitalized" ~ "Hospitalization",
         outcome == "icu" ~ "ICU admission",
-        outcome == "deceased" ~ "Mortality"
-      ), levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality")),
+        outcome == "deceased" ~ "Mortality\u2020"
+      ), levels = c("Severe COVID", "Hospitalization", "ICU admission", "Mortality\u2020")),
       Term = factor(case_when(
         term == "factor(vax_status)Partially vaccinated" ~ "Partially vaccinated",
         term == "factor(vax_status)Fully vaccinated (no booster)" ~ "Fully vaccinated\n(no booster)",
@@ -113,7 +113,8 @@ make_vax_by_cancer_plot <- function(d, dc) {
       y = "COVID-19 outcome odds ratio (95% CI)\ncorresponding to vaccination status",
       caption = "**Notes:**<br>
         - Error bars indicated 95% confidence interval<br>
-        - '*' indicates p-value for interaction significant at 0.05 level"
+        - '*' indicates p-value for interaction significant at 0.05 level<br>
+        - \u2020 Mortality results highly unstable due to very few events (i.e., < 5)"
     ) + 
     scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
     scale_color_manual(values = canc_stat_cols) +
